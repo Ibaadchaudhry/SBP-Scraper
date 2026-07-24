@@ -40,12 +40,14 @@ jobs:
         # Add more flags here if you need them, e.g.:
         #   python scrape.py --category "Microfinance" --department "BPRD"
         #
-        # Email alerts on GitHub Actions go through SMTP (see the env:
-        # block above), not Outlook -- Outlook only works on Windows.
-        # Set SBP_SMTP_HOST / SBP_SMTP_PORT / SBP_SMTP_USER / SBP_SMTP_PASS
+        # Email alerts on GitHub Actions go through SMTP via Gmail (see
+        # the env: block above), not Outlook -- Outlook only works on
+        # Windows. Set SBP_SMTP_HOST=smtp.gmail.com, SBP_SMTP_PORT=587,
+        # SBP_SMTP_USER=<your gmail>, SBP_SMTP_PASS=<gmail app password>
         # as repo Secrets (Settings → Secrets and variables → Actions)
-        # for this to actually send. Without them, the run still
-        # completes fine -- it just skips the email with a warning.
+        # for this to actually send -- see README for how to generate
+        # a Gmail App Password. Without these set, the run still
+        # completes fine, it just skips the email with a warning.
 
       - name: Commit updated data back to the repo
         run: |

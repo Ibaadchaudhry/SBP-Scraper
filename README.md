@@ -64,57 +64,57 @@ circulars scrape** → **Run workflow**.
 
 ---
 
-## Email alerts (working from GitHub Actions too)
+## Email alerts (via Gmail, working from GitHub Actions too)
 
-There are now **two** ways an alert email can be sent, and the scraper
-automatically picks whichever one is actually usable:
+Email alerts are sent over plain SMTP using a Gmail account as the
+sender — this works anywhere, including on GitHub's servers, unlike
+the Outlook option (which only works locally on Windows and is kept
+purely as a fallback if SMTP isn't configured).
 
-1. **SMTP** — plain email sending that works anywhere, including on
-   GitHub's servers. This is what makes email alerts work from the
-   automated daily run.
-2. **Outlook** (`pywin32`) — only works if you're running `scrape.py`
-   by hand on a Windows PC with desktop Outlook already signed in.
-   Used automatically as a fallback if SMTP isn't configured.
+### Step 1 — create a Gmail "App Password"
 
-**To make email alerts work on GitHub Actions, add these as repo
-Secrets:** go to your repo on GitHub → **Settings** → **Secrets and
-variables** → **Actions** → **New repository secret**, and add:
+Gmail won't accept your normal login password for this — you need a
+special 16-character **App Password** instead. To generate one:
 
-| Secret name | Example value | Notes |
-|---|---|---|
-| `SBP_SMTP_HOST` | `smtp.office365.com` | your email provider's SMTP server |
-| `SBP_SMTP_PORT` | `587` | usually 587; optional, defaults to 587 |
-| `SBP_SMTP_USER` | `ibaad.ahmed@mobilinkbank.com` | the mailbox to send *from* |
-| `SBP_SMTP_PASS` | *(see note below)* | its password or app password |
+1. Go to **https://myaccount.google.com/security**
+2. Turn on **2-Step Verification** if it isn't already on (this is
+   required before Google will let you create an App Password).
+3. Go to **https://myaccount.google.com/apppasswords**
+4. Under "App name," type something like `SBP Scraper` and click
+   **Create**.
+5. Google shows you a 16-character password (e.g. `abcd efgh ijkl
+   mnop`). Copy it — you can enter it with or without the spaces. This
+   is what you'll use below, **not** your regular Gmail password.
 
-**About `SBP_SMTP_PASS`:** if your Microsoft 365 account has
-multi-factor authentication (MFA) turned on — which it almost
-certainly does for a bank account — your normal login password will
-**not** work for SMTP. You'll need either:
-- An **app password** generated specifically for this (Microsoft
-  365: Security info → Add method → App password), or
-- Your IT/M365 admin to enable **Authenticated SMTP** for this
-  specific mailbox (Microsoft 365 admin center → the mailbox →
-  Manage email apps → "Authenticated SMTP").
+### Step 2 — add it to GitHub as repo Secrets
 
-This is a decision for your IT team, since it involves your official
-company mailbox — worth looping them in before setting this up. Gmail
-and other providers work the same way (SMTP host = `smtp.gmail.com`,
-and Gmail also requires an app password once 2-Step Verification is
-on).
+Go to your repo on GitHub → **Settings** → **Secrets and variables** →
+**Actions** → **New repository secret**, and add:
+
+| Secret name | Value |
+|---|---|
+| `SBP_SMTP_HOST` | `smtp.gmail.com` |
+| `SBP_SMTP_PORT` | `587` |
+| `SBP_SMTP_USER` | your full Gmail address, e.g. `yourname@gmail.com` |
+| `SBP_SMTP_PASS` | the 16-character App Password from Step 1 |
 
 **Who the alert gets sent to** is set directly in the workflow file
 (`.github/workflows/daily-scrape.yml`), in the `--alert-email` flag —
-edit that line to change the recipient.
+edit that line to change the recipient (it doesn't need to be a Gmail
+address; it can be sent *from* Gmail *to* any inbox, including your
+work email).
 
-**Testing it locally**, before relying on GitHub Actions, set the same
-variables in your terminal session and run the scraper as usual:
+### Step 3 — test it locally first (recommended)
 
-```bash
+Before relying on the daily GitHub Actions run, confirm it actually
+works from your own machine:
+
+```powershell
 # PowerShell
-$env:SBP_SMTP_HOST = "smtp.office365.com"
-$env:SBP_SMTP_USER = "ibaad.ahmed@mobilinkbank.com"
-$env:SBP_SMTP_PASS = "your-app-password"
+$env:SBP_SMTP_HOST = "smtp.gmail.com"
+$env:SBP_SMTP_PORT = "587"
+$env:SBP_SMTP_USER = "yourname@gmail.com"
+$env:SBP_SMTP_PASS = "your-16-char-app-password"
 python scrape.py --alert-email "ibaad.ahmed@mobilinkbank.com"
 ```
 
