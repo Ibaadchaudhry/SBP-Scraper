@@ -25,12 +25,58 @@ page has been read.
 
 ---
 
+## Automated daily scrape (GitHub Actions)
+
+The scraper now runs automatically every day at **9:00 AM Pakistan
+Time**, on GitHub's own servers — you don't need to keep your computer
+on or remember to run it yourself. This is set up in
+`.github/workflows/daily-scrape.yml`.
+
+Every day it:
+1. Checks out the repo on a fresh GitHub-hosted Linux machine.
+2. Installs Python, Chrome, and the required packages.
+3. Runs `python scrape.py` exactly like you would locally.
+4. Commits the updated `sbp_circulars.xlsx`, `sbp_circulars_changelog.json`,
+   and `sbp_scraper.log` straight back into the repo.
+
+**To get it running on your own GitHub repo:**
+
+```bash
+git remote add origin https://github.com/<your-username>/<your-repo>.git
+git branch -M main
+git push -u origin main
+```
+
+That's it — no extra setup, secrets, or tokens needed. GitHub Actions
+picks the workflow up automatically once it's in the repo.
+
+You can also trigger a run manually any time, without waiting for
+9 AM: go to your repo on GitHub → the **Actions** tab → **Daily SBP
+circulars scrape** → **Run workflow**.
+
+**A few things worth knowing:**
+- GitHub Actions schedules run in UTC. `0 4 * * *` in the workflow
+  file is 4:00 AM UTC, which is 9:00 AM PKT. If you ever move time
+  zones or want a different time, edit that one line.
+- GitHub doesn't guarantee the *exact* minute for scheduled runs —
+  during busy periods it can start a few minutes late. This is normal
+  and not something to worry about for a daily check.
+- The `--alert-email` (Outlook) feature only works on Windows with
+  Outlook installed, so it won't work inside this Linux-based workflow.
+  If you still want email alerts, keep running `scrape.py
+  --alert-email ...` locally (e.g. via Windows Task Scheduler) instead
+  of, or alongside, the GitHub Actions schedule.
+
+---
+
 ## Dashboard (live view in your browser)
 
-There's a local web dashboard that shows your circulars in a searchable,
-sortable table, a "recent activity" panel showing what was added or
-removed on the last run, and — new — a button that actually **triggers
-a real scrape** from the browser, plus a persistent **run log**.
+There's a local web dashboard that shows your circulars in a
+searchable, sortable table, a "recent activity" panel showing what was
+added or removed on the last run, and a "View log" panel showing the
+persistent run log. It re-reads `sbp_circulars.xlsx` fresh every time
+you load the page or click "Reload data" — no re-uploading or
+exporting needed.
 
 Start it with:
 
@@ -40,34 +86,21 @@ python -m sbp_scraper.dashboard_server
 
 Then open **http://localhost:8000** in your browser.
 
-There are two different buttons, and they do different things:
+Since scraping now happens automatically on GitHub's schedule (see
+above) rather than on your own machine, the usual flow is:
 
-- **"Reload data"** — just re-reads whatever's currently in
-  `sbp_circulars.xlsx` right now. Instant. Useful if something else
-  (Task Scheduler, a cron job, you running `scrape.py` manually)
-  already updated the file and you want the dashboard to catch up.
-- **"Run scraper now"** — actually kicks off a real scrape: opens
-  headless Chrome, pages through the live SBP site, saves the results,
-  and updates the changelog — the same thing `scrape.py` does from the
-  command line. This can take anywhere from several seconds to a
-  couple of minutes (it's a real browser paging through a real
-  website), so the button shows "Scraping…" while it works, and the
-  table refreshes automatically the moment it's done. You can keep
-  using the rest of the dashboard while it runs.
-- **"View log"** — opens a "Logbook" panel showing the persistent run
-  log (see below) right in the dashboard, so you don't need to go dig
-  up the log file yourself.
+1. `git pull` to fetch whatever the scheduled run committed overnight.
+2. Click **"Reload data"** on the dashboard (or just reload the page)
+   to see it.
 
 There's also an "Auto-refresh (30s)" checkbox if you want the table to
 keep polling for changes on its own while it's open on a screen (this
-only reloads data — it does not trigger a scrape by itself).
+still only re-reads whatever's on disk locally — remember to `git
+pull` first).
 
-**Options for what the "Run scraper now" button actually searches
-for** (department, category, etc.) are set when you *start* the
-server, the same way as `scrape.py`'s flags:
+Options:
 
 ```bash
-python -m sbp_scraper.dashboard_server --category "Microfinance" --department "BPRD" --alert-email "you@example.com"
 python -m sbp_scraper.dashboard_server --file my_circulars.xlsx --port 8080
 ```
 
@@ -75,16 +108,18 @@ python -m sbp_scraper.dashboard_server --file my_circulars.xlsx --port 8080
 
 ## The run log (backend audit trail)
 
-Every time the scraper runs — whether from the command line
-(`scrape.py`) or triggered from the dashboard — it appends a
-timestamped entry to **`sbp_scraper.log`**, a plain text file next to
-your Excel file. Unlike the changelog JSON (which only ever holds the
-*latest* diff), this log keeps the full history of every run: when it
-started, how many rows were found on each page, what changed, whether
-an email alert was sent, and the full error text if something failed.
+Every time the scraper runs — whether triggered by GitHub Actions on
+its schedule, or by you running `scrape.py` locally — it appends a
+timestamped entry to **`sbp_scraper.log`**, a plain text file kept
+right in the repo. Unlike the changelog JSON (which only ever holds
+the *latest* diff), this log keeps the full history of every run: when
+it started, how many rows were found on each page, what changed,
+whether an email alert was sent, and the full error text if something
+failed.
 
 You can:
-- Open `sbp_scraper.log` directly in any text editor.
+- Open `sbp_scraper.log` directly in any text editor (or on GitHub,
+  just view the file in the repo).
 - Or click **"View log"** in the dashboard to see the last 200 lines
   without leaving the browser.
 
@@ -220,7 +255,11 @@ script again:
 ## Project structure
 
 ```
-scrape.py                    ← run this file
+.github/workflows/daily-scrape.yml   ← runs the scraper daily at 9 AM PKT, commits results
+requirements.txt                     ← Python packages needed (local + GitHub Actions)
+.gitignore                           ← repo hygiene (data files ARE tracked, see above)
+
+scrape.py                    ← run this file (locally, or it's what GitHub Actions runs)
 sbp_scraper/
     config.py                ← site URL + Excel column names
     url_builder.py            ← builds the search-page web address from your filters
@@ -230,36 +269,36 @@ sbp_scraper/
     scraper.py                ← ties browser + parser + pagination together, page by page
     storage.py                ← loads the old Excel file, compares it to the new results,
                                   prints the change alert, saves the new snapshot + changelog
-    emailer.py                ← (optional) emails the change alert via desktop Outlook
+    emailer.py                ← (optional, Windows + Outlook only) emails the change alert
     run_log.py                ← persistent run log (sbp_scraper.log)
-    job.py                    ← run_scrape_job(): one full scrape run, shared by
-                                  scrape.py (CLI) and the dashboard's "Run" button
-    dashboard_server.py       ← local server: re-reads the xlsx live, can trigger a
-                                  real scrape, serves the dashboard + log
-    dashboard.html            ← the dashboard page itself (table, filters, recent
-                                  activity, run button, logbook panel)
+    job.py                    ← run_scrape_job(): the one place the full scrape logic lives
+    dashboard_server.py       ← local, read-only server: shows the live xlsx + log in a browser
+    dashboard.html            ← the dashboard page itself (table, filters, recent activity, log)
 ```
 
 ### How it all fits together
 
 ```
-scrape.py
+GitHub Actions (daily at 9 AM PKT, or triggered manually anytime)
    │
-   ├─→ url_builder.py   → builds the correct search URL from your filters
-   │
-   └─→ job.py            → run_scrape_job(): the actual work for one run
+   └─→ scrape.py
           │
-          ├─→ scraper.py        → opens the browser (browser.py), reads each page
-          │                        (parser.py), clicks "next" (pagination.py),
-          │                        repeats until every page is read
-          ├─→ storage.py        → loads last run's Excel file, compares it to
-          │                        this run's results, saves the changelog + snapshot
-          ├─→ emailer.py        → (optional) emails the alert via Outlook
-          └─→ run_log.py        → appends this run to the persistent log file
+          ├─→ url_builder.py   → builds the correct search URL from your filters
+          │
+          └─→ job.py            → run_scrape_job(): the actual work for one run
+                 │
+                 ├─→ scraper.py        → opens the browser (browser.py), reads each page
+                 │                        (parser.py), clicks "next" (pagination.py),
+                 │                        repeats until every page is read
+                 ├─→ storage.py        → loads last run's Excel file, compares it to
+                 │                        this run's results, saves the changelog + snapshot
+                 ├─→ emailer.py        → (optional, Windows-only) emails the alert via Outlook
+                 └─→ run_log.py        → appends this run to the persistent log file
+                        │
+                        └─→ GitHub Actions commits the updated files back to the repo
 
-dashboard_server.py  → calls the SAME job.py when you click "Run scraper now",
-                        so the dashboard and the command line always behave
-                        identically — there's only one place the scrape logic lives.
+dashboard_server.py  → separate and read-only: after a `git pull`, shows whatever's
+                        currently on disk in your browser. It does not run the scraper.
 ```
 
 Each file has one clear job, so if something on the site changes (say,
