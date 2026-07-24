@@ -31,13 +31,21 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run the scraper
-        run: python scrape.py --category "Microfinance"
+        env:
+          SBP_SMTP_HOST: ${{ secrets.SBP_SMTP_HOST }}
+          SBP_SMTP_PORT: ${{ secrets.SBP_SMTP_PORT }}
+          SBP_SMTP_USER: ${{ secrets.SBP_SMTP_USER }}
+          SBP_SMTP_PASS: ${{ secrets.SBP_SMTP_PASS }}
+        run: python scrape.py --category "Microfinance" --alert-email "ibaad.ahmed@mobilinkbank.com"
         # Add more flags here if you need them, e.g.:
         #   python scrape.py --category "Microfinance" --department "BPRD"
-        # Note: --alert-email (Outlook) only works on Windows with
-        # Outlook installed, so it will not work in this Linux runner --
-        # if it's passed here it will just print a warning and skip
-        # the email, without failing the run.
+        #
+        # Email alerts on GitHub Actions go through SMTP (see the env:
+        # block above), not Outlook -- Outlook only works on Windows.
+        # Set SBP_SMTP_HOST / SBP_SMTP_PORT / SBP_SMTP_USER / SBP_SMTP_PASS
+        # as repo Secrets (Settings → Secrets and variables → Actions)
+        # for this to actually send. Without them, the run still
+        # completes fine -- it just skips the email with a warning.
 
       - name: Commit updated data back to the repo
         run: |

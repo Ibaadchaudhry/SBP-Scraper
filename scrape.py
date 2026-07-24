@@ -61,9 +61,11 @@ def main():
     parser.add_argument("--show-browser", action="store_true",
                          help="Show the Chrome window instead of running headless (useful for debugging)")
     parser.add_argument("--alert-email", default="",
-                         help="Email address to notify (via desktop Outlook) when a change is "
-                              "detected. Requires pywin32 and Outlook installed/configured on "
-                              "this machine. Leave blank to disable email alerts.")
+                         help="Email address to notify when a change is detected. Sent via "
+                              "SMTP if SBP_SMTP_HOST/USER/PASS env vars are set (works "
+                              "anywhere, including GitHub Actions); otherwise falls back to "
+                              "desktop Outlook (Windows only, requires pywin32). Leave blank "
+                              "to disable email alerts.")
     args = parser.parse_args()
 
     result = run_scrape_job(

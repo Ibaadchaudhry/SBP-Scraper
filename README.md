@@ -61,11 +61,67 @@ circulars scrape** → **Run workflow**.
 - GitHub doesn't guarantee the *exact* minute for scheduled runs —
   during busy periods it can start a few minutes late. This is normal
   and not something to worry about for a daily check.
-- The `--alert-email` (Outlook) feature only works on Windows with
-  Outlook installed, so it won't work inside this Linux-based workflow.
-  If you still want email alerts, keep running `scrape.py
-  --alert-email ...` locally (e.g. via Windows Task Scheduler) instead
-  of, or alongside, the GitHub Actions schedule.
+
+---
+
+## Email alerts (working from GitHub Actions too)
+
+There are now **two** ways an alert email can be sent, and the scraper
+automatically picks whichever one is actually usable:
+
+1. **SMTP** — plain email sending that works anywhere, including on
+   GitHub's servers. This is what makes email alerts work from the
+   automated daily run.
+2. **Outlook** (`pywin32`) — only works if you're running `scrape.py`
+   by hand on a Windows PC with desktop Outlook already signed in.
+   Used automatically as a fallback if SMTP isn't configured.
+
+**To make email alerts work on GitHub Actions, add these as repo
+Secrets:** go to your repo on GitHub → **Settings** → **Secrets and
+variables** → **Actions** → **New repository secret**, and add:
+
+| Secret name | Example value | Notes |
+|---|---|---|
+| `SBP_SMTP_HOST` | `smtp.office365.com` | your email provider's SMTP server |
+| `SBP_SMTP_PORT` | `587` | usually 587; optional, defaults to 587 |
+| `SBP_SMTP_USER` | `ibaad.ahmed@mobilinkbank.com` | the mailbox to send *from* |
+| `SBP_SMTP_PASS` | *(see note below)* | its password or app password |
+
+**About `SBP_SMTP_PASS`:** if your Microsoft 365 account has
+multi-factor authentication (MFA) turned on — which it almost
+certainly does for a bank account — your normal login password will
+**not** work for SMTP. You'll need either:
+- An **app password** generated specifically for this (Microsoft
+  365: Security info → Add method → App password), or
+- Your IT/M365 admin to enable **Authenticated SMTP** for this
+  specific mailbox (Microsoft 365 admin center → the mailbox →
+  Manage email apps → "Authenticated SMTP").
+
+This is a decision for your IT team, since it involves your official
+company mailbox — worth looping them in before setting this up. Gmail
+and other providers work the same way (SMTP host = `smtp.gmail.com`,
+and Gmail also requires an app password once 2-Step Verification is
+on).
+
+**Who the alert gets sent to** is set directly in the workflow file
+(`.github/workflows/daily-scrape.yml`), in the `--alert-email` flag —
+edit that line to change the recipient.
+
+**Testing it locally**, before relying on GitHub Actions, set the same
+variables in your terminal session and run the scraper as usual:
+
+```bash
+# PowerShell
+$env:SBP_SMTP_HOST = "smtp.office365.com"
+$env:SBP_SMTP_USER = "ibaad.ahmed@mobilinkbank.com"
+$env:SBP_SMTP_PASS = "your-app-password"
+python scrape.py --alert-email "ibaad.ahmed@mobilinkbank.com"
+```
+
+If `SBP_SMTP_HOST`/`USER`/`PASS` aren't set at all (neither locally
+nor as GitHub Secrets), the scraper falls back to trying Outlook, and
+if that's not available either, it just logs a warning and continues
+— a missing email never stops the scrape itself from completing.
 
 ---
 
@@ -269,7 +325,9 @@ sbp_scraper/
     scraper.py                ← ties browser + parser + pagination together, page by page
     storage.py                ← loads the old Excel file, compares it to the new results,
                                   prints the change alert, saves the new snapshot + changelog
-    emailer.py                ← (optional, Windows + Outlook only) emails the change alert
+    emailer.py                ← picks SMTP or Outlook automatically (see below)
+    emailer_smtp.py           ← cross-platform email (works on GitHub Actions too)
+    emailer_outlook.py        ← Windows + Outlook fallback for local runs
     run_log.py                ← persistent run log (sbp_scraper.log)
     job.py                    ← run_scrape_job(): the one place the full scrape logic lives
     dashboard_server.py       ← local, read-only server: shows the live xlsx + log in a browser
@@ -292,7 +350,9 @@ GitHub Actions (daily at 9 AM PKT, or triggered manually anytime)
                  │                        repeats until every page is read
                  ├─→ storage.py        → loads last run's Excel file, compares it to
                  │                        this run's results, saves the changelog + snapshot
-                 ├─→ emailer.py        → (optional, Windows-only) emails the alert via Outlook
+                 ├─→ emailer.py        → tries SMTP first (emailer_smtp.py, works
+                 │                        everywhere); falls back to Outlook
+                 │                        (emailer_outlook.py, Windows-only)
                  └─→ run_log.py        → appends this run to the persistent log file
                         │
                         └─→ GitHub Actions commits the updated files back to the repo
