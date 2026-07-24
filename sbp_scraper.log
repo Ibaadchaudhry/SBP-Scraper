@@ -1,0 +1,68 @@
+2026-07-24 06:43:11 [INFO] ============================================================
+2026-07-24 06:43:11 [INFO] Run started (output=sbp_circulars.xlsx, category='Microfinance', department='')
+2026-07-24 06:43:11 [INFO] Base file has 0 row(s) from the last run
+2026-07-24 06:43:39 [INFO] Scraped 51 circular row(s) from the site this run
+2026-07-24 06:43:39 [INFO] ============================================================
+CHANGE DETECTED since last run
+============================================================
+Previous count: 0   New count: 51
+
++ 51 added:
+    + Revised Prudential Regulations (PRs) for Microfinance Banks  (https://www.sbp.org.pk/circulars/acfid-circular-no-01-of-2025)
+    + FORMAT OF ANNUAL AND INTERIM FINANCIAL STATEMENTS OF MICROFINANCE BANKS (MFBs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-03-of-2023)
+    + Shareholding Returns-Banks/DFIs/MFBs  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-30-of-2022)
+    + Revision in Prudential Regulations for Microfinance Banks:
+R-5: Maximum Loan Size and Eligibility of Borrowers,
+R-8: Classification of Assets and Provisioning Requirements &
+R-10: Charging-off Non-Performing Loans (NPLs)  (https://www.sbp.org.pk/circulars/acmfd-circular-no-02-of-2022)
+    + Amendments in Prudential Regulations for Microfinance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-02-of-2021)
+    + Regulatory Relief to Dampen the Effects of Covid-19 Prudential Regulations for Micro Finance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-01-of-2021)
+    + Revision In Prudential Regulations For Microfinance Banks:R - 5: Maximum Loan Size And Eligibility Of Borrowers & R - 6: Maximum Exposure Of A Borrower From MFBs/MFIs/Other Financial Institutions  (https://www.sbp.org.pk/circulars/acmfd-circular-no-02-of-2020)
+    + Regulatory Relief to Dampen The Effects Of Covid-19 - Prudential Regulations for Micro Finance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-07-of-2020)
+    + REGULATORY RELIEF TO DAMPEN THE EFFECTS OF COVID-19 - PRUDENTIAL REGULATIONS FOR MICRO FINANCE BANKS  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-04-of-2020)
+    + Regulatory Relief To Dampen The Effects Of Covid-19 - Prudential Regulations For Micro Finance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-01-of-2020)
+    + Guidelines on Compliance of Government of Pakistan’s Notifications issued under United Nations Security Council (UNSC) Resolutions  (https://www.sbp.org.pk/circulars/bprd-circular-no-09-of-2019)
+    + Fit & Proper Test (Criteria) for Microfinance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-04-of-2019)
+    + Housing Finance – Enhancement of Loan Limits for Microfinance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-no-01-of-2019)
+    + Enhancement of Maximum Loans Size for Microenterprises  (https://www.sbp.org.pk/circulars/acmfd-circular-no-03-of-2017)
+    + Microfinance Credit Guarantee Facility (MCGF)  (https://www.sbp.org.pk/circulars/acmfd-circular-no-01-of-2017)
+    + Membership of Microfinance Banks (MFBs) for Clearing House  (https://www.sbp.org.pk/circulars/psd-circular-no-02-of-2015)
+    + Fit & Proper Test (Criteria) for Microfinance Banks  (https://www.sbp.org.pk/circulars/acmfd-circular-no-05-of-2015)
+    + Amendment in Prudential Regulation R-5 for Microfinance Banks (MFBs)  (https://www.sbp.org.pk/circulars/acmfd-circular-no-02-of-2015)
+    + Amendment in Prudential Regulations (R-1) for Microfinance Banks (MFBs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2015)
+    + Submission of Bi-weekly Statements of Microfinance Banks through Data Acquisition Portal  (https://www.sbp.org.pk/circulars/osed-circular-letter-no-01-of-2015)
+    + Amendment in Microfinance Credit Guarantee Facility (MCGF)  (https://www.sbp.org.pk/circulars/acmfd-circular-no-01-of-2015)
+    + Financial Integrity Requirements for service providers to the Banks/MFBs/DFIs  (https://www.sbp.org.pk/circulars/bprd-circular-no-13-of-2014)
+    + Revised Prudential Regulations for Microfinance Banks (MFBs)”  (https://www.sbp.org.pk/circulars/acmfd-circular-no-03-of-2014)
+    + Microfinance Credit Guarantee Facility (MCGF)  (https://www.sbp.org.pk/circulars/acmfd-circular-no-03-of-2012)
+    + All Micro Finance Banks/DFIs/Exchange Companies  (https://www.sbp.org.pk/circulars/circular-no-1-of-2012)
+    + Prudential Regulations For Microfinance Banks Revision in PR - 10 & PR - 11  (https://www.sbp.org.pk/circulars/acmfd-circular-no-02-of-2012)
+    + Prudential Regulations For Microfinance Banks - Review of Instructions Relating to General Provision Requirements  (https://www.sbp.org.pk/circulars/acmfd-circular-letter-no-01-of-2011)
+    + All Micro Finance Banks/DFIs/Exchange Companies  (https://www.sbp.org.pk/circulars/circular-no-1-of-2011)
+    + Prudential Regulations for Microfinance Banks  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-04-of-2011)
+    + Relief Measures for Borrowers of Floods Affected Areas  (https://www.sbp.org.pk/circulars/mfd-circular-no-06-2010)
+    + Special FCY Borrowing by Micro Finance Banks/Institutions(MFB/Is)  (https://www.sbp.org.pk/circulars/fe-circular-no-08-of-2009)
+    + Microfinance Credit Guarantee Facility (MCGF)  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-26-of-2009)
+    + Amendments in Microfinance Credit Guarantee Facility (“MCGF”)  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-19-of-2009)
+    + Amendments in Microfinance Credit Guarantee Facility (“MCGF”)  (https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2009)
+    + Financing Facilities By Banks/DFIs to Microfinance Banks (MFBs) and Micro Finance Institutions (MFIs)  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-15)
+    + FINANCING FACILITIES BY BANKS/DFIs TO MICROFINANCE BANKS (MFBs) AND MICRO FINANCE INSTITUTIONS (MFIs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-15-of-2008)
+    + AMENDMENT IN REVISED PRUDENTIAL REGULATION FOR MICROFINANCE BANKs (MFBs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2008)
+    + REVISED PRUDENTIAL REGULATIONS FOR MICROFINANCE BANKS (MFBS)  (https://www.sbp.org.pk/circulars/bprd-circular-no-01)
+    + Revised Prudential Regulations for Microfinance Banks (Mfbs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-01-of-2007)
+    + Submission of Periodical Returns and Minutes of Board of Directors’/General Meetings  (https://www.sbp.org.pk/circulars/mfd-circular-letter-no-1-of-2007)
+    + AMENDMENTS IN PRUDENTIAL REGULATION NOS. 12 AND 14 FOR MICROFINANCE BANKS (MFBS)  (https://www.sbp.org.pk/circulars/smed-circular-no-10)
+    + GUIDELINES FOR COMMERCIAL BANKS TO UNDERTAKE MICROFINANCE BUSINESS  (https://www.sbp.org.pk/circulars/smed-circular-no-11)
+    + Guidelines for Commercial Banks to Undertake Microfinance Business  (https://www.sbp.org.pk/circulars/smed-circular-no-10-of-2006)
+    + Prudential Regulations for Commercial Banks to undertake Micro Finance Business  (https://www.sbp.org.pk/circulars/smed-circular-no-11-of-2006)
+    + Amendments in Prudential Regulation Nos. 12 And 14 for Microfinance Banks (MFBs)  (https://www.sbp.org.pk/circulars/smed-circular-no-7-of-2006)
+    + Fit & Proper Criteria for Board Members and President/Chief Executive of Microfinance Banks  (https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2005)
+    + CREDIT RATING OF MICROFINANCE BANKS PRUDENTIAL REGULATION 29 FOR MICROFINANCE BANKS  (https://www.sbp.org.pk/circulars/bsd-circular-no-11)
+    + GUIDELINES FOR MOBILE BANKING OPERATIONS OF MICROFINANCE BANKS/ INSTITUTIONS  (https://www.sbp.org.pk/circulars/bsd-circular-no-10)
+    + Guidelines For Mobile Banking Operations Of Microfinance Banks/ Institutions  (https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2003)
+    + MICRO FINANCE INSTITUTIONS – BRANCH LICENSING POLICY  (https://www.sbp.org.pk/circulars/bsd-circular-no-18)
+    + MICRO FINANCE RULES  (https://www.sbp.org.pk/circulars/bsd-circular-no-13)
+============================================================
+2026-07-24 06:43:39 [INFO] Sending email alert to ibaad.ahmed@mobilinkbank.com ...
+2026-07-24 06:43:41 [INFO]   -> email sent.
+2026-07-24 06:43:42 [INFO] Base file updated to this run's 51 row(s). Run finished OK.
