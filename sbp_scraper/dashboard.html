@@ -1,600 +1,1234 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Circular Register — SBP Filings</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper:#EDEAE0;
-    --paper-raised:#F5F3E9;
-    --line:#D3CDB6;
-    --ink:#1C2A22;
-    --muted:#6B6656;
-    --green:#1F6F4A;
-    --green-deep:#123B29;
-    --green-tint:#E2ECE4;
-    --gold:#A9822E;
-    --gold-tint:#F3E9D2;
-    --red:#9C3B2A;
-    --red-tint:#F2E1DC;
-    --radius:3px;
-    --shadow: 0 1px 0 rgba(28,42,34,0.08);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circular Register — SBP Filings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f6f8fa;
+      --bg-card: rgba(255, 255, 255, 0.82);
+      --bg-card-solid: #ffffff;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(16, 185, 129, 0.35);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-green: #059669;
+      --accent-green-bg: rgba(5, 150, 105, 0.08);
+      --accent-green-glow: rgba(5, 150, 105, 0.18);
+      --accent-gold: #d97706;
+      --accent-gold-bg: rgba(217, 119, 6, 0.1);
+      --accent-red: #dc2626;
+      --accent-red-bg: rgba(220, 38, 38, 0.1);
+      --header-bg: #091e15;
+      --header-text: #f8fafc;
+      --input-bg: rgba(255, 255, 255, 0.9);
+      --table-hover: rgba(5, 150, 105, 0.04);
+      --logbook-bg: #0c1a13;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --spotlight-color: rgba(5, 150, 105, 0.15);
+      --spotlight-border: rgba(5, 150, 105, 0.35);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    }
 
-  *{box-sizing:border-box;}
-  ::selection{background:var(--gold-tint);}
+    html.dark {
+      --bg-page: #070a0d;
+      --bg-card: rgba(15, 23, 42, 0.7);
+      --bg-card-solid: #0f172a;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(16, 185, 129, 0.4);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+      --accent-green-bg: rgba(16, 185, 129, 0.12);
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-gold: #fbbf24;
+      --accent-gold-bg: rgba(251, 191, 36, 0.12);
+      --accent-red: #f87171;
+      --accent-red-bg: rgba(248, 113, 113, 0.12);
+      --header-bg: #03070a;
+      --header-text: #f8fafc;
+      --input-bg: rgba(15, 23, 42, 0.8);
+      --table-hover: rgba(16, 185, 129, 0.06);
+      --logbook-bg: #030806;
+      --spotlight-color: rgba(16, 185, 129, 0.12);
+      --spotlight-border: rgba(16, 185, 129, 0.45);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
 
-  body{
-    margin:0;
-    background:var(--paper);
-    color:var(--ink);
-    font-family:"IBM Plex Sans", sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  /* subtle paper grain */
-  body::before{
-    content:"";
-    position:fixed; inset:0;
-    pointer-events:none;
-    opacity:0.035;
-    background-image:
-      repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 3px);
-    z-index:0;
-  }
+    ::selection {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+    }
 
-  .masthead{
-    background:var(--green-deep);
-    color:var(--paper-raised);
-    padding:22px 32px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:14px;
-    border-bottom:3px double rgba(237,234,224,0.35);
-  }
-  .masthead h1{
-    font-family:"Roboto Slab", serif;
-    font-weight:700;
-    font-size:1.5rem;
-    letter-spacing:0.01em;
-    margin:0 0 2px 0;
-  }
-  .masthead .subtitle{
-    font-size:0.8rem;
-    color:#C9D6CC;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-  }
+    body {
+      margin: 0;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+    }
 
-  .stamp{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    border:1.5px solid currentColor;
-    border-radius:999px;
-    padding:6px 14px 6px 12px;
-    font-family:"IBM Plex Mono", monospace;
-    font-size:0.72rem;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    white-space:nowrap;
-  }
-  .stamp .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;}
-  .stamp.live{color:#BFE3CC;}
-  .stamp.stale{color:#E3C79A;}
+    /* Ambient Mesh Background Overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 15% 15%, var(--accent-green-bg) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+      z-index: 0;
+    }
 
-  main{
-    max-width:1140px;
-    margin:0 auto;
-    padding:28px 32px 64px;
-    position:relative;
-    z-index:1;
-  }
+    /* Dynamic Spotlight Card Styling (@easemize/spotlight-card implementation) */
+    .spotlight-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-  .ledger-strip{
-    display:flex;
-    flex-wrap:wrap;
-    gap:0;
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    margin-bottom:22px;
-    overflow:hidden;
-  }
-  .ledger-cell{
-    flex:1 1 160px;
-    padding:14px 20px;
-    border-right:1px solid var(--line);
-  }
-  .ledger-cell:last-child{border-right:none;}
-  .ledger-cell .num{
-    font-family:"IBM Plex Mono", monospace;
-    font-size:1.5rem;
-    font-weight:600;
-    font-variant-numeric:tabular-nums;
-  }
-  .ledger-cell .label{
-    font-size:0.72rem;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:0.05em;
-    margin-top:2px;
-  }
+    .spotlight-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
+          var(--spotlight-color),
+          transparent 40%);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-  .activity{
-    border:1px solid var(--line);
-    border-left:4px solid var(--green);
-    background:var(--paper-raised);
-    border-radius:var(--radius);
-    padding:16px 20px;
-    margin-bottom:22px;
-  }
-  .activity.quiet{border-left-color:var(--line);}
-  .activity h2{
-    font-family:"Roboto Slab", serif;
-    font-size:0.95rem;
-    margin:0 0 4px 0;
-  }
-  .activity .meta{
-    font-size:0.78rem;
-    color:var(--muted);
-    margin-bottom:10px;
-  }
-  .activity ul{list-style:none; margin:0; padding:0;}
-  .activity li{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-    padding:6px 0;
-    border-top:1px dashed var(--line);
-    font-size:0.86rem;
-  }
-  .activity li:first-of-type{border-top:none;}
-  .tag{
-    font-family:"IBM Plex Mono", monospace;
-    font-size:0.66rem;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    padding:2px 7px;
-    border-radius:2px;
-    flex:none;
-  }
-  .tag.added{background:var(--gold-tint); color:var(--gold); border:1px solid var(--gold);}
-  .tag.removed{background:var(--red-tint); color:var(--red); border:1px solid var(--red);}
-  .activity a{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line);}
-  .activity a:hover{border-color:var(--ink);}
+    .spotlight-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius) + 1px);
+      padding: 1px;
+      background: radial-gradient(400px circle at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
+          var(--spotlight-border),
+          transparent 40%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
 
-  .controls{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    align-items:center;
-    margin-bottom:14px;
-  }
-  .controls input[type="text"],
-  .controls select,
-  .controls input[type="date"]{
-    font-family:"IBM Plex Sans", sans-serif;
-    font-size:0.84rem;
-    padding:8px 10px;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:var(--paper-raised);
-    color:var(--ink);
-  }
-  .controls input[type="text"]{flex:1 1 220px;}
-  .controls .date-group{display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--muted);}
-  .controls button{
-    font-family:"IBM Plex Mono", monospace;
-    font-size:0.76rem;
-    letter-spacing:0.03em;
-    text-transform:uppercase;
-    padding:8px 14px;
-    border:1px solid var(--green);
-    background:var(--green);
-    color:var(--paper-raised);
-    border-radius:var(--radius);
-    cursor:pointer;
-  }
-  .controls button:hover{background:var(--green-deep); border-color:var(--green-deep);}
-  .controls button.ghost{
-    background:transparent; color:var(--green); border-color:var(--green);
-  }
-  .controls button.ghost:hover{background:var(--green-tint);}
-  .controls label.toggle{
-    display:flex; align-items:center; gap:6px;
-    font-size:0.76rem; color:var(--muted); cursor:pointer;
-  }
+    .spotlight-card:hover::before,
+    .spotlight-card:hover::after {
+      opacity: 1;
+    }
 
-  .controls button:disabled{opacity:0.55; cursor:not-allowed;}
+    /* Header Masthead */
+    .masthead {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 24px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+      z-index: 10;
+    }
 
-  .logbook{
-    background:var(--green-deep);
-    border-radius:var(--radius);
-    margin-bottom:18px;
-    overflow:hidden;
-    border:1px solid var(--line);
-  }
-  .logbook-head{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:8px 14px;
-    font-family:"Roboto Slab", serif;
-    font-size:0.8rem;
-    color:var(--paper-raised);
-    border-bottom:1px solid rgba(237,234,224,0.2);
-  }
-  .logbook-meta{font-family:"IBM Plex Mono", monospace; font-size:0.68rem; color:#9FC2AC;}
-  .logbook-body{
-    margin:0;
-    padding:12px 14px;
-    max-height:220px;
-    overflow-y:auto;
-    font-family:"IBM Plex Mono", monospace;
-    font-size:0.72rem;
-    line-height:1.6;
-    color:#D9E7DD;
-    white-space:pre-wrap;
-    word-break:break-word;
-  }
+    .masthead .brand-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-  .table-wrap{
-    background:var(--paper-raised);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    overflow:hidden;
-    box-shadow:var(--shadow);
-  }
-  table{width:100%; border-collapse:collapse; font-size:0.86rem;}
-  thead th{
-    text-align:left;
-    font-family:"IBM Plex Mono", monospace;
-    font-size:0.68rem;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--muted);
-    padding:11px 16px;
-    border-bottom:2px solid var(--ink);
-    cursor:pointer;
-    user-select:none;
-    white-space:nowrap;
-  }
-  thead th:hover{color:var(--ink);}
-  thead th .arrow{opacity:0.4; font-size:0.6rem; margin-left:4px;}
-  tbody td{
-    padding:11px 16px;
-    border-top:1px solid var(--line);
-    vertical-align:top;
-  }
-  tbody tr:hover{background:var(--green-tint);}
-  td.date, td.circno{font-family:"IBM Plex Mono", monospace; font-size:0.8rem; white-space:nowrap; color:var(--muted);}
-  td.title a{color:var(--ink); text-decoration:none; font-weight:500;}
-  td.title a:hover{text-decoration:underline;}
-  td.title .url-note{display:block; font-size:0.72rem; color:var(--muted); margin-top:2px;}
-  .pill{
-    display:inline-block;
-    font-size:0.72rem;
-    padding:2px 8px;
-    border-radius:999px;
-    background:var(--green-tint);
-    color:var(--green-deep);
-    white-space:nowrap;
-  }
+    .masthead .brand-title span.badge {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+      padding: 2px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
 
-  .empty, .loading{
-    padding:60px 24px;
-    text-align:center;
-    color:var(--muted);
-  }
-  .empty .stamp-big{
-    font-family:"Roboto Slab", serif;
-    font-size:1.1rem;
-    border:2px solid var(--red);
-    color:var(--red);
-    display:inline-block;
-    padding:10px 22px;
-    border-radius:999px;
-    transform:rotate(-2deg);
-    margin-bottom:14px;
-  }
+    .masthead .subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
 
-  footer{
-    max-width:1140px;
-    margin:24px auto 0;
-    padding:0 32px;
-    font-size:0.72rem;
-    color:var(--muted);
-    position:relative; z-index:1;
-  }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-  @media (max-width:640px){
-    .masthead{padding:16px 18px;}
-    main{padding:18px 18px 48px;}
-    thead{display:none;}
-    table, tbody, tr, td{display:block; width:100%;}
-    tbody tr{border-top:1px solid var(--line); padding:10px 0;}
-    tbody td{border-top:none; padding:3px 0;}
-  }
+    /* Theme Switcher Button */
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--header-text);
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
 
-  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
-    outline:2px solid var(--green); outline-offset:2px;
-  }
-</style>
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-green);
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+    }
+
+    .stamp .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      flex: none;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .stamp.live {
+      color: var(--accent-green);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .stamp.stale {
+      color: var(--accent-gold);
+      border-color: rgba(251, 191, 36, 0.3);
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Ledger Metric Cards Strip */
+    .ledger-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .ledger-cell {
+      padding: 20px 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ledger-cell .num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .ledger-cell .label {
+      font-size: 0.75rem;
+      font-family: "JetBrains Mono", monospace;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Activity Widget */
+    .activity {
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .activity.quiet {
+      opacity: 0.85;
+    }
+
+    .activity h2 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.1rem;
+      margin: 0 0 4px 0;
+      color: var(--text-primary);
+    }
+
+    .activity .meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .activity ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .activity li {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .activity li:first-of-type {
+      border-top: none;
+    }
+
+    .tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex: none;
+      font-weight: 600;
+    }
+
+    .tag.added {
+      background: var(--accent-gold-bg);
+      color: var(--accent-gold);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+    }
+
+    .tag.removed {
+      background: var(--accent-red-bg);
+      color: var(--accent-red);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+    }
+
+    .activity a {
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-color);
+      transition: border-color 0.2s ease;
+    }
+
+    .activity a:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    /* Control Dashboard Bar */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .controls input[type="text"],
+    .controls select,
+    .controls input[type="date"] {
+      font-family: "Inter", sans-serif;
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--input-bg);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .controls input[type="text"]:focus,
+    .controls select:focus,
+    .controls input[type="date"]:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px var(--accent-green-bg);
+    }
+
+    .controls input[type="text"] {
+      flex: 1 1 240px;
+    }
+
+    .controls .date-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .controls button {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 10px 18px;
+      border: 1px solid var(--accent-green);
+      background: var(--accent-green);
+      color: #ffffff;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px var(--accent-green-glow);
+    }
+
+    .controls button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--accent-green-glow);
+    }
+
+    .controls button.ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border-color: var(--border-color);
+      box-shadow: none;
+    }
+
+    .controls button.ghost:hover {
+      background: var(--accent-green-bg);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .controls label.toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: "JetBrains Mono", monospace;
+      user-select: none;
+    }
+
+    .controls button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Logbook Container */
+    .logbook {
+      background: var(--logbook-bg);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .logbook-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.88rem;
+      color: #f8fafc;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .logbook-meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--accent-green);
+    }
+
+    .logbook-body {
+      margin: 0;
+      padding: 16px 20px;
+      max-height: 240px;
+      overflow-y: auto;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: #a7f3d0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Table Wrapper */
+    .table-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    thead th {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      background: rgba(0, 0, 0, 0.02);
+      transition: color 0.2s ease;
+    }
+
+    thead th:hover {
+      color: var(--text-primary);
+    }
+
+    thead th .arrow {
+      opacity: 0.5;
+      font-size: 0.7rem;
+      margin-left: 6px;
+      color: var(--accent-green);
+    }
+
+    tbody td {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      vertical-align: middle;
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover td {
+      background: var(--table-hover);
+    }
+
+    td.date,
+    td.circno {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      color: var(--text-secondary);
+    }
+
+    td.title a {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    td.title a:hover {
+      color: var(--accent-green);
+      text-decoration: underline;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-family: "JetBrains Mono", monospace;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+
+    td.category-col {
+      width: 200px;
+      max-width: 200px;
+    }
+
+    .empty {
+      padding: 64px 24px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .empty .stamp-big {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.2rem;
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      background: var(--accent-red-bg);
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    footer {
+      max-width: 1240px;
+      margin: 32px auto 0;
+      padding: 0 24px 32px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: "JetBrains Mono", monospace;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .masthead {
+        padding: 20px;
+      }
+
+      main {
+        padding: 20px 16px 48px;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls input[type="text"] {
+        flex: 1 1 100%;
+      }
+
+      .date-group {
+        justify-content: space-between;
+      }
+
+      thead {
+        display: none;
+      }
+
+      table,
+      tbody,
+      tr,
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      tbody tr {
+        border-top: 1px solid var(--border-color);
+        padding: 12px 0;
+      }
+
+      tbody td {
+        border-top: none;
+        padding: 6px 16px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--accent-green);
+      outline-offset: 2px;
+    }
+
+    /* ── Keyframes ── */
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+      50%       { opacity: 0.4; box-shadow: 0 0 2px currentColor; }
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.85) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── Page entry animations ── */
+    .masthead {
+      animation: fadeSlideDown 0.5s ease both;
+    }
+
+    .ledger-strip {
+      animation: fadeSlideUp 0.5s ease 0.1s both;
+    }
+
+    .controls {
+      animation: fadeSlideUp 0.5s ease 0.2s both;
+    }
+
+    .table-wrap {
+      animation: fadeSlideUp 0.5s ease 0.3s both;
+    }
+
+    footer {
+      animation: fadeIn 0.6s ease 0.5s both;
+    }
+
+    /* ── Ledger card number pop ── */
+    .ledger-cell .num {
+      animation: countUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+    }
+
+    /* ── Live dot pulse ── */
+    .stamp.live .dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* ── Table rows staggered entry ── */
+    tbody tr {
+      animation: rowIn 0.3s ease both;
+    }
+
+    tbody tr:nth-child(1)  { animation-delay: 0.05s; }
+    tbody tr:nth-child(2)  { animation-delay: 0.10s; }
+    tbody tr:nth-child(3)  { animation-delay: 0.15s; }
+    tbody tr:nth-child(4)  { animation-delay: 0.20s; }
+    tbody tr:nth-child(5)  { animation-delay: 0.25s; }
+    tbody tr:nth-child(6)  { animation-delay: 0.30s; }
+    tbody tr:nth-child(7)  { animation-delay: 0.35s; }
+    tbody tr:nth-child(8)  { animation-delay: 0.40s; }
+    tbody tr:nth-child(9)  { animation-delay: 0.45s; }
+    tbody tr:nth-child(10) { animation-delay: 0.50s; }
+
+    /* ── Row hover slide ── */
+    tbody tr {
+      transition: transform 0.18s ease;
+    }
+
+    tbody tr:hover {
+      transform: translateX(3px);
+    }
+
+    /* ── Pill glow on hover ── */
+    .pill {
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pill:hover {
+      box-shadow: 0 0 10px var(--accent-green-glow);
+      background: rgba(16, 185, 129, 0.22);
+    }
+
+    /* ── Button press feel ── */
+    .controls button:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    /* ── Header badge shimmer ── */
+    .masthead .brand-title span.badge {
+      background: linear-gradient(
+        90deg,
+        var(--accent-green-bg) 0%,
+        rgba(16, 185, 129, 0.3) 50%,
+        var(--accent-green-bg) 100%
+      );
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+    }
+
+    /* ── Spotlight card hover lift ── */
+    .spotlight-card {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+    }
+
+    .spotlight-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* ── Theme toggle icon spin ── */
+    #themeIcon {
+      display: inline-block;
+      transition: transform 0.4s ease;
+    }
+
+    .theme-toggle:hover #themeIcon {
+      transform: rotate(20deg) scale(1.2);
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="masthead">
-  <div>
-    <h1>Circular Register</h1>
-    <div class="subtitle">State Bank of Pakistan · Live filing tracker</div>
-  </div>
-  <div id="syncStamp" class="stamp live"><span class="dot"></span>Connecting…</div>
-</div>
-
-<main>
-
-  <div id="ledgerStrip" class="ledger-strip"></div>
-
-  <div id="activitySection"></div>
-
-  <div class="controls">
-    <input type="text" id="searchBox" placeholder="Search title or circular no.">
-    <select id="categoryFilter"><option value="">All categories</option></select>
-    <select id="typeFilter"><option value="">All circular types</option></select>
-    <div class="date-group">
-      from <input type="date" id="dateFrom"> to <input type="date" id="dateTo">
+  <div class="masthead">
+    <div>
+      <div class="brand-title">
+        Circular Register
+        <span class="badge">LIVE TRACKER</span>
+      </div>
+      <div class="subtitle">State Bank of Pakistan · Filing Intelligence</div>
     </div>
-    <label class="toggle"><input type="checkbox" id="autoRefresh"> Auto-refresh (30s)</label>
-    <button class="ghost" id="resetBtn" type="button">Reset filters</button>
-    <button class="ghost" id="logBtn" type="button">View log</button>
-    <button id="refreshBtn" type="button">Reload data</button>
-  </div>
-
-  <div id="logPanel" class="logbook" style="display:none;">
-    <div class="logbook-head">
-      <span>Run log</span>
-      <span id="logMeta" class="logbook-meta"></span>
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle theme">
+        <span id="themeIcon">🌙</span>
+        <span id="themeText">DARK</span>
+      </button>
+      <div id="syncStamp" class="stamp live"><span class="dot"></span>Connecting…</div>
     </div>
-    <pre id="logBody" class="logbook-body"></pre>
   </div>
 
-  <div class="table-wrap">
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th data-key="title">Title <span class="arrow"></span></th>
-          <th data-key="circular_no">No. <span class="arrow"></span></th>
-          <th data-key="date">Date <span class="arrow"></span></th>
-          <th data-key="category">Category <span class="arrow"></span></th>
-          <th data-key="circular_type">Type <span class="arrow"></span></th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-    <div id="emptyState" class="empty" style="display:none;"></div>
-  </div>
+  <main>
 
-</main>
+    <div id="ledgerStrip" class="ledger-strip"></div>
 
-<footer>
-  Reads sbp_circulars.xlsx live from disk via the local dashboard server. Run <code>python -m sbp_scraper.dashboard_server</code> to serve this page.
-</footer>
+    <div id="activitySection"></div>
 
-<script>
-const state = { rows: [], sortKey: 'date', sortDir: 'desc', changelog: null };
+    <div class="controls spotlight-card">
+      <input type="text" id="searchBox" placeholder="Search title or circular no.">
+      <select id="categoryFilter">
+        <option value="">All categories</option>
+      </select>
+      <select id="typeFilter">
+        <option value="">All circular types</option>
+      </select>
+      <div class="date-group">
+        from <input type="date" id="dateFrom">
+        to <input type="date" id="dateTo">
+      </div>
+      <label class="toggle"><input type="checkbox" id="autoRefresh"> Auto-refresh (30s)</label>
+      <button class="ghost" id="resetBtn" type="button">Reset</button>
+      <button class="ghost" id="logBtn" type="button">View log</button>
+      <button id="refreshBtn" type="button">Reload</button>
+    </div>
 
-const MONTHS = {January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
-function parseDate(str){
-  if(!str) return null;
-  const m = String(str).match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\s+(\d{4})/);
-  if(!m) return null;
-  return new Date(Number(m[3]), MONTHS[m[1]], Number(m[2]));
-}
+    <div id="logPanel" class="logbook" style="display:none;">
+      <div class="logbook-head">
+        <span>System Run Log</span>
+        <span id="logMeta" class="logbook-meta"></span>
+      </div>
+      <pre id="logBody" class="logbook-body"></pre>
+    </div>
 
-async function fetchJSON(url){
-  const res = await fetch(url, {cache:'no-store'});
-  if(!res.ok) throw new Error('Request failed: ' + res.status);
-  return res.json();
-}
+    <div class="table-wrap spotlight-card">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th data-key="title">Title <span class="arrow"></span></th>
+            <th data-key="circular_no">No. <span class="arrow"></span></th>
+            <th data-key="date">Date <span class="arrow"></span></th>
+            <th data-key="category">Category <span class="arrow"></span></th>
+            <th data-key="circular_type">Type <span class="arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty" style="display:none;"></div>
+    </div>
 
-function setStamp(ok, text){
-  const el = document.getElementById('syncStamp');
-  el.className = 'stamp ' + (ok ? 'live' : 'stale');
-  el.innerHTML = '<span class="dot"></span>' + text;
-}
+  </main>
 
-function renderLedgerStrip(rows){
-  const cats = new Set(rows.map(r=>r.category).filter(Boolean));
-  const dates = rows.map(r=>parseDate(r.date)).filter(Boolean).sort((a,b)=>a-b);
-  const fmt = d => d ? d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
-  const cells = [
-    [rows.length, 'Filed'],
-    [cats.size, 'Categories'],
-    [dates.length ? fmt(dates[0]) : '—', 'Earliest'],
-    [dates.length ? fmt(dates[dates.length-1]) : '—', 'Latest'],
-  ];
-  document.getElementById('ledgerStrip').innerHTML = cells.map(([num,label]) =>
-    `<div class="ledger-cell"><div class="num">${num}</div><div class="label">${label}</div></div>`
-  ).join('');
-}
+  <footer>
+    <div>State Bank of Pakistan Live Filing Monitor</div>
+    <div>Run <code>python -m sbp_scraper.dashboard_server</code> to synchronize</div>
+  </footer>
 
-function renderActivity(cl){
-  const el = document.getElementById('activitySection');
-  if(!cl || !cl.changed){
-    el.innerHTML = `<div class="activity quiet"><h2>No change on last check</h2>
-      <div class="meta">${cl && cl.checked_at ? 'Last checked ' + new Date(cl.checked_at).toLocaleString() : 'Waiting for first scrape run.'}</div></div>`;
-    return;
-  }
-  const items = [
-    ...(cl.added||[]).map(r => `<li><span class="tag added">New</span><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a></li>`),
-    ...(cl.removed||[]).map(r => `<li><span class="tag removed">Removed</span><span>${r.title}</span></li>`),
-  ].join('');
-  el.innerHTML = `<div class="activity">
-      <h2>Recent activity</h2>
+  <script>
+    // --- State Management ---
+    const state = { rows: [], sortKey: 'date', sortDir: 'desc', changelog: null };
+
+    // --- Theme Switcher Logic ---
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+
+    function setTheme(isDark) {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+        themeIcon.textContent = '🌙';
+        themeText.textContent = 'DARK';
+        localStorage.setItem('sbp_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'LIGHT';
+        localStorage.setItem('sbp_theme', 'light');
+      }
+    }
+
+    // Auto-detect theme preference
+    const savedTheme = localStorage.getItem('sbp_theme');
+    if (savedTheme) {
+      setTheme(savedTheme === 'dark');
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark);
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const isCurrentDark = document.documentElement.classList.contains('dark');
+      setTheme(!isCurrentDark);
+    });
+
+    // --- Spotlight Mouse Tracking Effect (@easemize/spotlight-card) ---
+    function initSpotlightEffect() {
+      document.querySelectorAll('.spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+      });
+    }
+
+    // --- Data Parsers & Utility Functions ---
+    const MONTHS = { January: 0, February: 1, March: 2, April: 3, May: 4, June: 5, July: 6, August: 7, September: 8, October: 9, November: 10, December: 11 };
+    function parseDate(str) {
+      if (!str) return null;
+      const m = String(str).match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\s+(\d{4})/);
+      if (!m) return null;
+      return new Date(Number(m[3]), MONTHS[m[1]], Number(m[2]));
+    }
+
+    async function fetchJSON(url) {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Request failed: ' + res.status);
+      return res.json();
+    }
+
+    function setStamp(ok, text) {
+      const el = document.getElementById('syncStamp');
+      el.className = 'stamp ' + (ok ? 'live' : 'stale');
+      el.innerHTML = '<span class="dot"></span>' + text;
+    }
+
+    // --- Render Functions ---
+    function renderLedgerStrip(rows) {
+      const cats = new Set(rows.map(r => r.category).filter(Boolean));
+      const dates = rows.map(r => parseDate(r.date)).filter(Boolean).sort((a, b) => a - b);
+      const fmt = d => d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+      const cells = [
+        [rows.length, 'Total Filings'],
+        [cats.size, 'Categories'],
+        [dates.length ? fmt(dates[0]) : '—', 'Earliest Entry'],
+        [dates.length ? fmt(dates[dates.length - 1]) : '—', 'Latest Entry'],
+      ];
+      document.getElementById('ledgerStrip').innerHTML = cells.map(([num, label]) => `
+    <div class="spotlight-card ledger-cell">
+      <div class="num">${num}</div>
+      <div class="label">${label}</div>
+    </div>
+  `).join('');
+
+      initSpotlightEffect();
+    }
+
+    function renderActivity(cl) {
+      const el = document.getElementById('activitySection');
+      if (!cl || !cl.changed) {
+        el.innerHTML = `
+      <div class="spotlight-card activity quiet">
+        <h2>No change on last check</h2>
+        <div class="meta">${cl && cl.checked_at ? 'Last checked ' + new Date(cl.checked_at).toLocaleString() : 'Waiting for first scrape run.'}</div>
+      </div>`;
+        initSpotlightEffect();
+        return;
+      }
+      const items = [
+        ...(cl.added || []).map(r => `<li><span class="tag added">New</span><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a></li>`),
+        ...(cl.removed || []).map(r => `<li><span class="tag removed">Removed</span><span>${r.title}</span></li>`),
+      ].join('');
+      el.innerHTML = `
+    <div class="spotlight-card activity">
+      <h2>Recent Activity</h2>
       <div class="meta">Last check: ${new Date(cl.checked_at).toLocaleString()} · ${cl.old_count} → ${cl.new_count} filings</div>
       <ul>${items}</ul>
     </div>`;
-}
+      initSpotlightEffect();
+    }
 
-function populateFilters(rows){
-  const catSel = document.getElementById('categoryFilter');
-  const typeSel = document.getElementById('typeFilter');
-  const cats = [...new Set(rows.map(r=>r.category).filter(Boolean))].sort();
-  const types = [...new Set(rows.map(r=>r.circular_type).filter(Boolean))].sort();
-  const keepFirst = (sel) => sel.options[0];
-  catSel.innerHTML = ''; catSel.appendChild(new Option('All categories',''));
-  cats.forEach(c => catSel.appendChild(new Option(c, c)));
-  typeSel.innerHTML = ''; typeSel.appendChild(new Option('All circular types',''));
-  types.forEach(t => typeSel.appendChild(new Option(t, t)));
-}
+    function populateFilters(rows) {
+      const catSel = document.getElementById('categoryFilter');
+      const typeSel = document.getElementById('typeFilter');
+      const cats = [...new Set(rows.map(r => r.category).filter(Boolean))].sort();
+      const types = [...new Set(rows.map(r => r.circular_type).filter(Boolean))].sort();
 
-function applyFiltersAndRender(){
-  const q = document.getElementById('searchBox').value.trim().toLowerCase();
-  const cat = document.getElementById('categoryFilter').value;
-  const type = document.getElementById('typeFilter').value;
-  const from = document.getElementById('dateFrom').value ? new Date(document.getElementById('dateFrom').value) : null;
-  const to = document.getElementById('dateTo').value ? new Date(document.getElementById('dateTo').value) : null;
+      catSel.innerHTML = '<option value="">All categories</option>';
+      cats.forEach(c => catSel.appendChild(new Option(c, c)));
 
-  let rows = state.rows.filter(r => {
-    if(q && !(String(r.title).toLowerCase().includes(q) || String(r.circular_no).toLowerCase().includes(q))) return false;
-    if(cat && r.category !== cat) return false;
-    if(type && r.circular_type !== type) return false;
-    const d = parseDate(r.date);
-    if(from && (!d || d < from)) return false;
-    if(to && (!d || d > to)) return false;
-    return true;
-  });
+      typeSel.innerHTML = '<option value="">All circular types</option>';
+      types.forEach(t => typeSel.appendChild(new Option(t, t)));
+    }
 
-  rows.sort((a,b) => {
-    let av = a[state.sortKey], bv = b[state.sortKey];
-    if(state.sortKey === 'date'){ av = parseDate(av) || new Date(0); bv = parseDate(bv) || new Date(0); }
-    else { av = String(av||'').toLowerCase(); bv = String(bv||'').toLowerCase(); }
-    if(av < bv) return state.sortDir === 'asc' ? -1 : 1;
-    if(av > bv) return state.sortDir === 'asc' ? 1 : -1;
-    return 0;
-  });
+    function applyFiltersAndRender() {
+      const q = document.getElementById('searchBox').value.trim().toLowerCase();
+      const cat = document.getElementById('categoryFilter').value;
+      const type = document.getElementById('typeFilter').value;
+      const from = document.getElementById('dateFrom').value ? new Date(document.getElementById('dateFrom').value) : null;
+      const to = document.getElementById('dateTo').value ? new Date(document.getElementById('dateTo').value) : null;
 
-  const tbody = document.getElementById('tableBody');
-  const empty = document.getElementById('emptyState');
-  if(rows.length === 0){
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    empty.innerHTML = state.rows.length === 0
-      ? '<div class="stamp-big">No data loaded</div><div>Run the scraper, then start the dashboard server to see live filings here.</div>'
-      : '<div class="stamp-big">No matches</div><div>Nothing in the register matches these filters.</div>';
-    return;
-  }
-  empty.style.display = 'none';
-  tbody.innerHTML = rows.map(r => `
+      let rows = state.rows.filter(r => {
+        if (q && !(String(r.title).toLowerCase().includes(q) || String(r.circular_no).toLowerCase().includes(q))) return false;
+        if (cat && r.category !== cat) return false;
+        if (type && r.circular_type !== type) return false;
+        const d = parseDate(r.date);
+        if (from && (!d || d < from)) return false;
+        if (to && (!d || d > to)) return false;
+        return true;
+      });
+
+      rows.sort((a, b) => {
+        let av = a[state.sortKey], bv = b[state.sortKey];
+        if (state.sortKey === 'date') { av = parseDate(av) || new Date(0); bv = parseDate(bv) || new Date(0); }
+        else { av = String(av || '').toLowerCase(); bv = String(bv || '').toLowerCase(); }
+        if (av < bv) return state.sortDir === 'asc' ? -1 : 1;
+        if (av > bv) return state.sortDir === 'asc' ? 1 : -1;
+        return 0;
+      });
+
+      const tbody = document.getElementById('tableBody');
+      const empty = document.getElementById('emptyState');
+      if (rows.length === 0) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        empty.innerHTML = state.rows.length === 0
+          ? '<div class="stamp-big">No data loaded</div><div>Run the scraper, then start the dashboard server to see live filings here.</div>'
+          : '<div class="stamp-big">No matches found</div><div>Nothing in the register matches your current filter criteria.</div>';
+        return;
+      }
+      empty.style.display = 'none';
+      tbody.innerHTML = rows.map(r => `
     <tr>
       <td class="title"><a href="${r.url}" target="_blank" rel="noopener">${r.title || 'Untitled'}</a></td>
       <td class="circno">${r.circular_no || '—'}</td>
       <td class="date">${r.date || '—'}</td>
-      <td><span class="pill">${r.category || '—'}</span></td>
+      <td class="category-col"><span class="pill" title="${r.category || ''}">${r.category || '—'}</span></td>
       <td>${r.circular_type || '—'}</td>
     </tr>
   `).join('');
-}
+      // Re-trigger row entry animation on each render
+      tbody.querySelectorAll('tr').forEach((tr, i) => {
+        tr.style.animation = 'none';
+        tr.offsetHeight; // reflow
+        tr.style.animation = '';
+        tr.style.animationDelay = `${Math.min(i, 10) * 0.05}s`;
+      });
+    }
 
-async function loadData(){
-  setStamp(true, 'Syncing…');
-  try{
-    const [rows, changelog] = await Promise.all([
-      fetchJSON('/api/circulars'),
-      fetchJSON('/api/changes'),
-    ]);
-    state.rows = rows;
-    state.changelog = changelog;
-    renderLedgerStrip(rows);
-    renderActivity(changelog);
-    populateFilters(rows);
-    applyFiltersAndRender();
-    setStamp(true, 'Live · synced ' + new Date().toLocaleTimeString());
-  } catch(err){
-    setStamp(false, 'Server unreachable');
-    document.getElementById('emptyState').style.display = 'block';
-    document.getElementById('emptyState').innerHTML =
-      '<div class="stamp-big">Not connected</div><div>Start the server with <code>python -m sbp_scraper.dashboard_server</code>, then refresh.</div>';
-    document.getElementById('tableBody').innerHTML = '';
-  }
-}
+    async function loadData() {
+      setStamp(true, 'Syncing…');
+      try {
+        const [rows, changelog] = await Promise.all([
+          fetchJSON('/api/circulars'),
+          fetchJSON('/api/changes'),
+        ]);
+        state.rows = rows;
+        state.changelog = changelog;
+        renderLedgerStrip(rows);
+        renderActivity(changelog);
+        populateFilters(rows);
+        applyFiltersAndRender();
+        setStamp(true, 'Live · synced ' + new Date().toLocaleTimeString());
+      } catch (err) {
+        setStamp(false, 'Server unreachable');
+        document.getElementById('emptyState').style.display = 'block';
+        document.getElementById('emptyState').innerHTML =
+          '<div class="stamp-big">Not connected</div><div>Start the server with <code>python -m sbp_scraper.dashboard_server</code>, then refresh.</div>';
+        document.getElementById('tableBody').innerHTML = '';
+      }
+    }
 
-document.querySelectorAll('#dataTable thead th').forEach(th => {
-  th.addEventListener('click', () => {
-    const key = th.dataset.key;
-    if(state.sortKey === key){ state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc'; }
-    else { state.sortKey = key; state.sortDir = 'asc'; }
-    document.querySelectorAll('#dataTable thead .arrow').forEach(a => a.textContent = '');
-    th.querySelector('.arrow').textContent = state.sortDir === 'asc' ? '▲' : '▼';
-    applyFiltersAndRender();
-  });
-});
+    // --- Event Listeners ---
+    document.querySelectorAll('#dataTable thead th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        if (state.sortKey === key) { state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc'; }
+        else { state.sortKey = key; state.sortDir = 'asc'; }
+        document.querySelectorAll('#dataTable thead .arrow').forEach(a => a.textContent = '');
+        th.querySelector('.arrow').textContent = state.sortDir === 'asc' ? '▲' : '▼';
+        applyFiltersAndRender();
+      });
+    });
 
-['searchBox','categoryFilter','typeFilter','dateFrom','dateTo'].forEach(id => {
-  document.getElementById(id).addEventListener('input', applyFiltersAndRender);
-});
+    ['searchBox', 'categoryFilter', 'typeFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('input', applyFiltersAndRender);
+    });
 
-// Stop the mouse wheel from nudging the date fields' value when hovering
-// over them (a default browser behavior most people don't expect).
-// Belt-and-suspenders: block it in the capture phase, cancel the
-// default action, and drop focus immediately so no scroll tick can
-// change the day/month/year segment underneath.
-['dateFrom','dateTo'].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    el.blur();
-  }, { passive: false, capture: true });
-});
-document.getElementById('resetBtn').addEventListener('click', () => {
-  document.getElementById('searchBox').value = '';
-  document.getElementById('categoryFilter').value = '';
-  document.getElementById('typeFilter').value = '';
-  document.getElementById('dateFrom').value = '';
-  document.getElementById('dateTo').value = '';
-  applyFiltersAndRender();
-});
-document.getElementById('refreshBtn').addEventListener('click', loadData);
+    // Integrated Scroll-locking & Responsive Dynamic Constraints Fix
+    const dateFromEl = document.getElementById('dateFrom');
+    const dateToEl = document.getElementById('dateTo');
 
-let autoTimer = null;
-document.getElementById('autoRefresh').addEventListener('change', (e) => {
-  if(e.target.checked){ autoTimer = setInterval(loadData, 30000); }
-  else { clearInterval(autoTimer); }
-});
+    const handleDateFromChange = () => {
+      if (dateFromEl.value) {
+        dateToEl.min = dateFromEl.value;
+        if (dateToEl.value && dateToEl.value < dateFromEl.value) {
+          dateToEl.value = dateFromEl.value;
+        }
+      } else {
+        dateToEl.removeAttribute('min');
+      }
+      applyFiltersAndRender();
+    };
 
-// --- Logbook: shows the persistent run log kept on the server. ---
-const logBtn = document.getElementById('logBtn');
-const logPanel = document.getElementById('logPanel');
+    const handleDateToChange = () => {
+      if (dateToEl.value) {
+        dateFromEl.max = dateToEl.value;
+        if (dateFromEl.value && dateFromEl.value > dateToEl.value) {
+          dateFromEl.value = dateToEl.value;
+        }
+      } else {
+        dateFromEl.removeAttribute('max');
+      }
+      applyFiltersAndRender();
+    };
 
-async function loadLog(){
-  try{
-    const data = await fetchJSON('/api/log?lines=200');
-    const body = document.getElementById('logBody');
-    body.textContent = (data.lines && data.lines.length) ? data.lines.join('\n') : 'No log entries yet — run the scraper at least once.';
-    body.scrollTop = body.scrollHeight;
-    document.getElementById('logMeta').textContent = data.lines ? `last ${data.lines.length} line(s)` : '';
-  } catch(err){
-    document.getElementById('logBody').textContent = 'Could not load the log.';
-  }
-}
+    dateFromEl.addEventListener('input', handleDateFromChange);
+    dateToEl.addEventListener('input', handleDateToChange);
 
-logBtn.addEventListener('click', () => {
-  const isOpen = logPanel.style.display !== 'none';
-  logPanel.style.display = isOpen ? 'none' : 'block';
-  logBtn.textContent = isOpen ? 'View log' : 'Hide log';
-  if(!isOpen){ loadLog(); }
-});
+    // Prevent wheel scrolling & arrow-key incremental shifting
+    [dateFromEl, dateToEl].forEach(el => {
+      const stopScroll = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (document.activeElement === el) {
+          el.blur();
+        }
+      };
 
-loadData();
-</script>
+      el.addEventListener('wheel', stopScroll, { passive: false, capture: true });
+      el.addEventListener('mousewheel', stopScroll, { passive: false, capture: true });
 
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
+      });
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('searchBox').value = '';
+      document.getElementById('categoryFilter').value = '';
+      document.getElementById('typeFilter').value = '';
+
+      dateFromEl.value = '';
+      dateToEl.value = '';
+      dateFromEl.removeAttribute('max');
+      dateToEl.removeAttribute('min');
+
+      applyFiltersAndRender();
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+    let autoTimer = null;
+    document.getElementById('autoRefresh').addEventListener('change', (e) => {
+      if (e.target.checked) { autoTimer = setInterval(loadData, 30000); }
+      else { clearInterval(autoTimer); }
+    });
+
+    // Logbook view logic
+    const logBtn = document.getElementById('logBtn');
+    const logPanel = document.getElementById('logPanel');
+
+    async function loadLog() {
+      try {
+        const data = await fetchJSON('/api/log?lines=200');
+        const body = document.getElementById('logBody');
+        body.textContent = (data.lines && data.lines.length) ? data.lines.join('\n') : 'No log entries yet — run the scraper at least once.';
+        body.scrollTop = body.scrollHeight;
+        document.getElementById('logMeta').textContent = data.lines ? `last ${data.lines.length} line(s)` : '';
+      } catch (err) {
+        document.getElementById('logBody').textContent = 'Could not load the log.';
+      }
+    }
+
+    logBtn.addEventListener('click', () => {
+      const isOpen = logPanel.style.display !== 'none';
+      logPanel.style.display = isOpen ? 'none' : 'block';
+      logBtn.textContent = isOpen ? 'View log' : 'Hide log';
+      if (!isOpen) { loadLog(); }
+    });
+
+    // Initialize on page load
+    initSpotlightEffect();
+    loadData();
+  </script>
 
 </body>
+
 </html>
