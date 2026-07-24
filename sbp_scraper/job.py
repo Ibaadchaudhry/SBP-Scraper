@@ -4,7 +4,7 @@ line (scrape.py) and the dashboard's 'Run scraper now' button
 
 Every run is written to the persistent log (run_log.py) as well as to
 the console, and the return value is a small JSON-friendly summary the
-dashboard can display without re-reading the Excel file itself.
+dashboard can display without re-reading the CSV file itself.
 """
 
 import pandas as pd
@@ -16,7 +16,7 @@ from .scraper import scrape_all
 from .storage import diff_snapshots, format_alert, load_existing, save_changelog, save_snapshot
 
 
-def run_scrape_job(output="sbp_circulars.xlsx", search_doc="", department="",
+def run_scrape_job(output="sbp_circulars.csv", search_doc="", department="",
                     category="Microfinance", circular_type="", start_date="",
                     end_date="", headless=True, delay=1.0, alert_email=""):
     """Run one full scrape: load the base file, scrape the site, diff,

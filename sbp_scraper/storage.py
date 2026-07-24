@@ -1,6 +1,6 @@
-"""Reading/writing the Excel output.
+"""Reading/writing the CSV output.
 
-Semantics: the Excel file on disk is treated as a "base" snapshot from
+Semantics: the CSV file on disk is treated as a "base" snapshot from
 the previous run. Each time the scraper runs, the freshly-scraped
 results are compared against that base (by URL, which is unique per
 circular). Any additions or removals are reported, and the base file
@@ -21,7 +21,7 @@ def load_existing(output_path):
     """Load the previous run's snapshot ("base"). Empty frame if none yet."""
     if Path(output_path).exists():
         try:
-            return pd.read_excel(output_path)
+            return pd.read_csv(output_path)
         except Exception as e:
             print(f"Warning: couldn't read existing file ({e}); starting fresh.")
     return pd.DataFrame(columns=COLUMNS)
@@ -80,12 +80,12 @@ def save_snapshot(output_path, new_rows):
     pages). This becomes the new base for the next run."""
     new_df = pd.DataFrame(new_rows, columns=COLUMNS)
     new_df = new_df.drop_duplicates(subset=["url"], keep="first")
-    new_df.to_excel(output_path, index=False)
+    new_df.to_csv(output_path, index=False)
     return new_df
 
 
 def changelog_path_for(output_path):
-    """The changelog JSON lives next to the Excel file, same base name."""
+    """The changelog JSON lives next to the CSV file, same base name."""
     return str(Path(output_path).with_suffix("")) + "_changelog.json"
 
 

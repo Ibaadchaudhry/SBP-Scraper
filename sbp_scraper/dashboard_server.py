@@ -37,12 +37,12 @@ DASHBOARD_HTML_PATH = Path(__file__).parent / "dashboard.html"
 
 
 def _read_circulars_json(xlsx_path):
-    """Re-read the Excel file from disk right now and return it as a
+    """Re-read the CSV file from disk right now and return it as a
     list of plain dicts, ready to serialize as JSON. This is what
     makes the dashboard 'live' -- every request re-reads the file."""
     if not Path(xlsx_path).exists():
         return []
-    df = pd.read_excel(xlsx_path)
+    df = pd.read_csv(xlsx_path)
     for col in COLUMNS:
         if col not in df.columns:
             df[col] = ""
@@ -113,8 +113,8 @@ def make_handler(xlsx_path):
 
 def main():
     parser = argparse.ArgumentParser(description="Serve the SBP circulars dashboard.")
-    parser.add_argument("--file", default="sbp_circulars.xlsx",
-                         help="Path to the Excel file (kept up to date by GitHub Actions)")
+    parser.add_argument("--file", default="sbp_circulars.csv",
+                         help="Path to the CSV file (kept up to date by GitHub Actions)")
     parser.add_argument("--port", type=int, default=8000, help="Port to serve on")
     args = parser.parse_args()
 

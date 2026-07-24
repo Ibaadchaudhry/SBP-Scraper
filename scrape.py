@@ -56,7 +56,7 @@ def main():
     parser.add_argument("--circular-type", default="", help="Circular type filter")
     parser.add_argument("--start-date", default="", help="Start date filter")
     parser.add_argument("--end-date", default="", help="End date filter")
-    parser.add_argument("--output", default="sbp_circulars.xlsx", help="Excel file to read/write")
+    parser.add_argument("--output", default="sbp_circulars.csv", help="CSV file to read/write")
     parser.add_argument("--delay", type=float, default=1.0, help="Seconds to wait after each page click")
     parser.add_argument("--show-browser", action="store_true",
                          help="Show the Chrome window instead of running headless (useful for debugging)")
