@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circular Register — SBP Filings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDEAE0;
+    --paper-raised:#F5F3E9;
+    --line:#D3CDB6;
+    --ink:#1C2A22;
+    --muted:#6B6656;
+    --green:#1F6F4A;
+    --green-deep:#123B29;
+    --green-tint:#E2ECE4;
+    --gold:#A9822E;
+    --gold-tint:#F3E9D2;
+    --red:#9C3B2A;
+    --red-tint:#F2E1DC;
+    --radius:3px;
+    --shadow: 0 1px 0 rgba(28,42,34,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  ::selection{background:var(--gold-tint);}
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* subtle paper grain */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    opacity:0.035;
+    background-image:
+      repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 3px);
+    z-index:0;
+  }
+
+  .masthead{
+    background:var(--green-deep);
+    color:var(--paper-raised);
+    padding:22px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    border-bottom:3px double rgba(237,234,224,0.35);
+  }
+  .masthead h1{
+    font-family:"Roboto Slab", serif;
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:0.01em;
+    margin:0 0 2px 0;
+  }
+  .masthead .subtitle{
+    font-size:0.8rem;
+    color:#C9D6CC;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+  }
+
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid currentColor;
+    border-radius:999px;
+    padding:6px 14px 6px 12px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .stamp .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;}
+  .stamp.live{color:#BFE3CC;}
+  .stamp.stale{color:#E3C79A;}
+
+  main{
+    max-width:1140px;
+    margin:0 auto;
+    padding:28px 32px 64px;
+    position:relative;
+    z-index:1;
+  }
+
+  .ledger-strip{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+    overflow:hidden;
+  }
+  .ledger-cell{
+    flex:1 1 160px;
+    padding:14px 20px;
+    border-right:1px solid var(--line);
+  }
+  .ledger-cell:last-child{border-right:none;}
+  .ledger-cell .num{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:1.5rem;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+  }
+  .ledger-cell .label{
+    font-size:0.72rem;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    margin-top:2px;
+  }
+
+  .activity{
+    border:1px solid var(--line);
+    border-left:4px solid var(--green);
+    background:var(--paper-raised);
+    border-radius:var(--radius);
+    padding:16px 20px;
+    margin-bottom:22px;
+  }
+  .activity.quiet{border-left-color:var(--line);}
+  .activity h2{
+    font-family:"Roboto Slab", serif;
+    font-size:0.95rem;
+    margin:0 0 4px 0;
+  }
+  .activity .meta{
+    font-size:0.78rem;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  .activity ul{list-style:none; margin:0; padding:0;}
+  .activity li{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding:6px 0;
+    border-top:1px dashed var(--line);
+    font-size:0.86rem;
+  }
+  .activity li:first-of-type{border-top:none;}
+  .tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.66rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:2px 7px;
+    border-radius:2px;
+    flex:none;
+  }
+  .tag.added{background:var(--gold-tint); color:var(--gold); border:1px solid var(--gold);}
+  .tag.removed{background:var(--red-tint); color:var(--red); border:1px solid var(--red);}
+  .activity a{color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line);}
+  .activity a:hover{border-color:var(--ink);}
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    margin-bottom:14px;
+  }
+  .controls input[type="text"],
+  .controls select,
+  .controls input[type="date"]{
+    font-family:"IBM Plex Sans", sans-serif;
+    font-size:0.84rem;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--paper-raised);
+    color:var(--ink);
+  }
+  .controls input[type="text"]{flex:1 1 220px;}
+  .controls .date-group{display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--muted);}
+  .controls button{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.76rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    padding:8px 14px;
+    border:1px solid var(--green);
+    background:var(--green);
+    color:var(--paper-raised);
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .controls button:hover{background:var(--green-deep); border-color:var(--green-deep);}
+  .controls button.ghost{
+    background:transparent; color:var(--green); border-color:var(--green);
+  }
+  .controls button.ghost:hover{background:var(--green-tint);}
+  .controls label.toggle{
+    display:flex; align-items:center; gap:6px;
+    font-size:0.76rem; color:var(--muted); cursor:pointer;
+  }
+
+  .controls button:disabled{opacity:0.55; cursor:not-allowed;}
+
+  .logbook{
+    background:var(--green-deep);
+    border-radius:var(--radius);
+    margin-bottom:18px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .logbook-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 14px;
+    font-family:"Roboto Slab", serif;
+    font-size:0.8rem;
+    color:var(--paper-raised);
+    border-bottom:1px solid rgba(237,234,224,0.2);
+  }
+  .logbook-meta{font-family:"IBM Plex Mono", monospace; font-size:0.68rem; color:#9FC2AC;}
+  .logbook-body{
+    margin:0;
+    padding:12px 14px;
+    max-height:220px;
+    overflow-y:auto;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    line-height:1.6;
+    color:#D9E7DD;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .table-wrap{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  table{width:100%; border-collapse:collapse; font-size:0.86rem;}
+  thead th{
+    text-align:left;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    padding:11px 16px;
+    border-bottom:2px solid var(--ink);
+    cursor:pointer;
+    user-select:none;
+    white-space:nowrap;
+  }
+  thead th:hover{color:var(--ink);}
+  thead th .arrow{opacity:0.4; font-size:0.6rem; margin-left:4px;}
+  tbody td{
+    padding:11px 16px;
+    border-top:1px solid var(--line);
+    vertical-align:top;
+  }
+  tbody tr:hover{background:var(--green-tint);}
+  td.date, td.circno{font-family:"IBM Plex Mono", monospace; font-size:0.8rem; white-space:nowrap; color:var(--muted);}
+  td.title a{color:var(--ink); text-decoration:none; font-weight:500;}
+  td.title a:hover{text-decoration:underline;}
+  td.title .url-note{display:block; font-size:0.72rem; color:var(--muted); margin-top:2px;}
+  .pill{
+    display:inline-block;
+    font-size:0.72rem;
+    padding:2px 8px;
+    border-radius:999px;
+    background:var(--green-tint);
+    color:var(--green-deep);
+    white-space:nowrap;
+  }
+
+  .empty, .loading{
+    padding:60px 24px;
+    text-align:center;
+    color:var(--muted);
+  }
+  .empty .stamp-big{
+    font-family:"Roboto Slab", serif;
+    font-size:1.1rem;
+    border:2px solid var(--red);
+    color:var(--red);
+    display:inline-block;
+    padding:10px 22px;
+    border-radius:999px;
+    transform:rotate(-2deg);
+    margin-bottom:14px;
+  }
+
+  footer{
+    max-width:1140px;
+    margin:24px auto 0;
+    padding:0 32px;
+    font-size:0.72rem;
+    color:var(--muted);
+    position:relative; z-index:1;
+  }
+
+  @media (max-width:640px){
+    .masthead{padding:16px 18px;}
+    main{padding:18px 18px 48px;}
+    thead{display:none;}
+    table, tbody, tr, td{display:block; width:100%;}
+    tbody tr{border-top:1px solid var(--line); padding:10px 0;}
+    tbody td{border-top:none; padding:3px 0;}
+  }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+    outline:2px solid var(--green); outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div>
+    <h1>Circular Register</h1>
+    <div class="subtitle">State Bank of Pakistan · Live filing tracker</div>
+  </div>
+  <div id="syncStamp" class="stamp live"><span class="dot"></span>Connecting…</div>
+</div>
+
+<main>
+
+  <div id="ledgerStrip" class="ledger-strip"></div>
+
+  <div id="activitySection"></div>
+
+  <div class="controls">
+    <input type="text" id="searchBox" placeholder="Search title or circular no.">
+    <select id="categoryFilter"><option value="">All categories</option></select>
+    <select id="typeFilter"><option value="">All circular types</option></select>
+    <div class="date-group">
+      from <input type="date" id="dateFrom"> to <input type="date" id="dateTo">
+    </div>
+    <label class="toggle"><input type="checkbox" id="autoRefresh"> Auto-refresh (30s)</label>
+    <button class="ghost" id="resetBtn" type="button">Reset filters</button>
+    <button class="ghost" id="logBtn" type="button">View log</button>
+    <button id="refreshBtn" type="button">Reload data</button>
+  </div>
+
+  <div id="logPanel" class="logbook" style="display:none;">
+    <div class="logbook-head">
+      <span>Run log</span>
+      <span id="logMeta" class="logbook-meta"></span>
+    </div>
+    <pre id="logBody" class="logbook-body"></pre>
+  </div>
+
+  <div class="table-wrap">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th data-key="title">Title <span class="arrow"></span></th>
+          <th data-key="circular_no">No. <span class="arrow"></span></th>
+          <th data-key="date">Date <span class="arrow"></span></th>
+          <th data-key="category">Category <span class="arrow"></span></th>
+          <th data-key="circular_type">Type <span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div id="emptyState" class="empty" style="display:none;"></div>
+  </div>
+
+</main>
+
+<footer>
+  Reads sbp_circulars.xlsx live from disk via the local dashboard server. Run <code>python -m sbp_scraper.dashboard_server</code> to serve this page.
+</footer>
+
+<script>
+const state = { rows: [], sortKey: 'date', sortDir: 'desc', changelog: null };
+
+const MONTHS = {January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
+function parseDate(str){
+  if(!str) return null;
+  const m = String(str).match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})\s+(\d{4})/);
+  if(!m) return null;
+  return new Date(Number(m[3]), MONTHS[m[1]], Number(m[2]));
+}
+
+async function fetchJSON(url){
+  const res = await fetch(url, {cache:'no-store'});
+  if(!res.ok) throw new Error('Request failed: ' + res.status);
+  return res.json();
+}
+
+function setStamp(ok, text){
+  const el = document.getElementById('syncStamp');
+  el.className = 'stamp ' + (ok ? 'live' : 'stale');
+  el.innerHTML = '<span class="dot"></span>' + text;
+}
+
+function renderLedgerStrip(rows){
+  const cats = new Set(rows.map(r=>r.category).filter(Boolean));
+  const dates = rows.map(r=>parseDate(r.date)).filter(Boolean).sort((a,b)=>a-b);
+  const fmt = d => d ? d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+  const cells = [
+    [rows.length, 'Filed'],
+    [cats.size, 'Categories'],
+    [dates.length ? fmt(dates[0]) : '—', 'Earliest'],
+    [dates.length ? fmt(dates[dates.length-1]) : '—', 'Latest'],
+  ];
+  document.getElementById('ledgerStrip').innerHTML = cells.map(([num,label]) =>
+    `<div class="ledger-cell"><div class="num">${num}</div><div class="label">${label}</div></div>`
+  ).join('');
+}
+
+function renderActivity(cl){
+  const el = document.getElementById('activitySection');
+  if(!cl || !cl.changed){
+    el.innerHTML = `<div class="activity quiet"><h2>No change on last check</h2>
+      <div class="meta">${cl && cl.checked_at ? 'Last checked ' + new Date(cl.checked_at).toLocaleString() : 'Waiting for first scrape run.'}</div></div>`;
+    return;
+  }
+  const items = [
+    ...(cl.added||[]).map(r => `<li><span class="tag added">New</span><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a></li>`),
+    ...(cl.removed||[]).map(r => `<li><span class="tag removed">Removed</span><span>${r.title}</span></li>`),
+  ].join('');
+  el.innerHTML = `<div class="activity">
+      <h2>Recent activity</h2>
+      <div class="meta">Last check: ${new Date(cl.checked_at).toLocaleString()} · ${cl.old_count} → ${cl.new_count} filings</div>
+      <ul>${items}</ul>
+    </div>`;
+}
+
+function populateFilters(rows){
+  const catSel = document.getElementById('categoryFilter');
+  const typeSel = document.getElementById('typeFilter');
+  const cats = [...new Set(rows.map(r=>r.category).filter(Boolean))].sort();
+  const types = [...new Set(rows.map(r=>r.circular_type).filter(Boolean))].sort();
+  const keepFirst = (sel) => sel.options[0];
+  catSel.innerHTML = ''; catSel.appendChild(new Option('All categories',''));
+  cats.forEach(c => catSel.appendChild(new Option(c, c)));
+  typeSel.innerHTML = ''; typeSel.appendChild(new Option('All circular types',''));
+  types.forEach(t => typeSel.appendChild(new Option(t, t)));
+}
+
+function applyFiltersAndRender(){
+  const q = document.getElementById('searchBox').value.trim().toLowerCase();
+  const cat = document.getElementById('categoryFilter').value;
+  const type = document.getElementById('typeFilter').value;
+  const from = document.getElementById('dateFrom').value ? new Date(document.getElementById('dateFrom').value) : null;
+  const to = document.getElementById('dateTo').value ? new Date(document.getElementById('dateTo').value) : null;
+
+  let rows = state.rows.filter(r => {
+    if(q && !(String(r.title).toLowerCase().includes(q) || String(r.circular_no).toLowerCase().includes(q))) return false;
+    if(cat && r.category !== cat) return false;
+    if(type && r.circular_type !== type) return false;
+    const d = parseDate(r.date);
+    if(from && (!d || d < from)) return false;
+    if(to && (!d || d > to)) return false;
+    return true;
+  });
+
+  rows.sort((a,b) => {
+    let av = a[state.sortKey], bv = b[state.sortKey];
+    if(state.sortKey === 'date'){ av = parseDate(av) || new Date(0); bv = parseDate(bv) || new Date(0); }
+    else { av = String(av||'').toLowerCase(); bv = String(bv||'').toLowerCase(); }
+    if(av < bv) return state.sortDir === 'asc' ? -1 : 1;
+    if(av > bv) return state.sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+  if(rows.length === 0){
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    empty.innerHTML = state.rows.length === 0
+      ? '<div class="stamp-big">No data loaded</div><div>Run the scraper, then start the dashboard server to see live filings here.</div>'
+      : '<div class="stamp-big">No matches</div><div>Nothing in the register matches these filters.</div>';
+    return;
+  }
+  empty.style.display = 'none';
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="title"><a href="${r.url}" target="_blank" rel="noopener">${r.title || 'Untitled'}</a></td>
+      <td class="circno">${r.circular_no || '—'}</td>
+      <td class="date">${r.date || '—'}</td>
+      <td><span class="pill">${r.category || '—'}</span></td>
+      <td>${r.circular_type || '—'}</td>
+    </tr>
+  `).join('');
+}
+
+async function loadData(){
+  setStamp(true, 'Syncing…');
+  try{
+    const [rows, changelog] = await Promise.all([
+      fetchJSON('/api/circulars'),
+      fetchJSON('/api/changes'),
+    ]);
+    state.rows = rows;
+    state.changelog = changelog;
+    renderLedgerStrip(rows);
+    renderActivity(changelog);
+    populateFilters(rows);
+    applyFiltersAndRender();
+    setStamp(true, 'Live · synced ' + new Date().toLocaleTimeString());
+  } catch(err){
+    setStamp(false, 'Server unreachable');
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('emptyState').innerHTML =
+      '<div class="stamp-big">Not connected</div><div>Start the server with <code>python -m sbp_scraper.dashboard_server</code>, then refresh.</div>';
+    document.getElementById('tableBody').innerHTML = '';
+  }
+}
+
+document.querySelectorAll('#dataTable thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if(state.sortKey === key){ state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc'; }
+    else { state.sortKey = key; state.sortDir = 'asc'; }
+    document.querySelectorAll('#dataTable thead .arrow').forEach(a => a.textContent = '');
+    th.querySelector('.arrow').textContent = state.sortDir === 'asc' ? '▲' : '▼';
+    applyFiltersAndRender();
+  });
+});
+
+['searchBox','categoryFilter','typeFilter','dateFrom','dateTo'].forEach(id => {
+  document.getElementById(id).addEventListener('input', applyFiltersAndRender);
+});
+
+// Stop the mouse wheel from nudging the date fields' value when hovering
+// over them (a default browser behavior most people don't expect).
+// Belt-and-suspenders: block it in the capture phase, cancel the
+// default action, and drop focus immediately so no scroll tick can
+// change the day/month/year segment underneath.
+['dateFrom','dateTo'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    el.blur();
+  }, { passive: false, capture: true });
+});
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('searchBox').value = '';
+  document.getElementById('categoryFilter').value = '';
+  document.getElementById('typeFilter').value = '';
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value = '';
+  applyFiltersAndRender();
+});
+document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+let autoTimer = null;
+document.getElementById('autoRefresh').addEventListener('change', (e) => {
+  if(e.target.checked){ autoTimer = setInterval(loadData, 30000); }
+  else { clearInterval(autoTimer); }
+});
+
+// --- Logbook: shows the persistent run log kept on the server. ---
+const logBtn = document.getElementById('logBtn');
+const logPanel = document.getElementById('logPanel');
+
+async function loadLog(){
+  try{
+    const data = await fetchJSON('/api/log?lines=200');
+    const body = document.getElementById('logBody');
+    body.textContent = (data.lines && data.lines.length) ? data.lines.join('\n') : 'No log entries yet — run the scraper at least once.';
+    body.scrollTop = body.scrollHeight;
+    document.getElementById('logMeta').textContent = data.lines ? `last ${data.lines.length} line(s)` : '';
+  } catch(err){
+    document.getElementById('logBody').textContent = 'Could not load the log.';
+  }
+}
+
+logBtn.addEventListener('click', () => {
+  const isOpen = logPanel.style.display !== 'none';
+  logPanel.style.display = isOpen ? 'none' : 'block';
+  logBtn.textContent = isOpen ? 'View log' : 'Hide log';
+  if(!isOpen){ loadLog(); }
+});
+
+loadData();
+</script>
+
+
+</body>
+</html>

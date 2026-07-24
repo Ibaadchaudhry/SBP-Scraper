@@ -1,0 +1,48 @@
+name: Daily SBP circulars scrape
+
+on:
+  schedule:
+    # GitHub Actions schedules always run in UTC.
+    # 04:00 UTC = 09:00 AM Pakistan Time (PKT, UTC+5).
+    # If you want a different local time, adjust this line and the
+    # comment above it accordingly.
+    - cron: "0 4 * * *"
+  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
+
+permissions:
+  contents: write   # needed so this workflow can commit the updated files back
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the scraper
+        run: python scrape.py --category "Microfinance"
+        # Add more flags here if you need them, e.g.:
+        #   python scrape.py --category "Microfinance" --department "BPRD"
+        # Note: --alert-email (Outlook) only works on Windows with
+        # Outlook installed, so it will not work in this Linux runner --
+        # if it's passed here it will just print a warning and skip
+        # the email, without failing the run.
+
+      - name: Commit updated data back to the repo
+        run: |
+          git config user.name "sbp-scraper-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add sbp_circulars.xlsx sbp_circulars_changelog.json sbp_scraper.log
+          git diff --cached --quiet && echo "No changes to commit." || git commit -m "Daily scrape: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

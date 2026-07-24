@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# NOTE: sbp_circulars.xlsx, sbp_circulars_changelog.json, and
+# sbp_scraper.log are intentionally NOT ignored. The GitHub Actions
+# workflow commits these back to the repo after every scheduled run,
+# so the repo itself is always the latest known state. See README.
