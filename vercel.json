@@ -1,7 +1,27 @@
 {
-  "functions": {
-    "api/*.py": {
-      "includeFiles": "*.{csv,json,log}"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    {
+      "src": "api/circulars.py",
+      "use": "@vercel/python",
+      "config": { "includeFiles": "sbp_circulars.csv" }
+    },
+    {
+      "src": "api/changes.py",
+      "use": "@vercel/python",
+      "config": { "includeFiles": "sbp_circulars_changelog.json" }
+    },
+    {
+      "src": "api/log.py",
+      "use": "@vercel/python",
+      "config": { "includeFiles": "sbp_scraper.log" }
     }
-  }
+  ],
+  "routes": [
+    { "src": "/api/circulars", "dest": "/api/circulars.py" },
+    { "src": "/api/changes", "dest": "/api/changes.py" },
+    { "src": "/api/log", "dest": "/api/log.py" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
