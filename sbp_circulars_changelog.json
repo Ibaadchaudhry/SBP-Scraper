@@ -1,13 +1,8 @@
 {
-  "checked_at": "2026-07-25T10:12:15.465931+00:00",
-  "old_count": 51,
+  "checked_at": "2026-07-26T10:23:35.355834+00:00",
+  "old_count": 50,
   "new_count": 50,
-  "changed": true,
+  "changed": false,
   "added": [],
-  "removed": [
-    {
-      "title": "AMENDMENTS IN PRUDENTIAL REGULATION NOS. 12 AND 14 FOR MICROFINANCE BANKS (MFBS)",
-      "url": "https://www.sbp.org.pk/circulars/smed-circular-no-10"
-    }
-  ]
+  "removed": []
 }
