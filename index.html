@@ -977,6 +977,22 @@
       el.innerHTML = '<span class="dot"></span>' + text;
     }
 
+    // --- Category formatting ---
+    // Raw category strings look like "Full Department Name / ABBR / Number".
+    // Show the full name when present; otherwise fall back to "ABBR / Number"
+    // (or whatever pieces remain non-empty).
+    function formatCategory(raw) {
+      if (!raw) return '';
+      const parts = raw.split('/').map(p => p.trim()).filter(Boolean);
+      if (parts.length === 0) return '';
+      const [fullName, ...rest] = parts;
+      if (fullName && !/^[A-Z0-9]{2,8}$/.test(fullName)) {
+        // First segment looks like a real department name, not just an abbreviation/number.
+        return fullName;
+      }
+      return parts.join(' / ');
+    }
+
     // --- Render Functions ---
     function renderLedgerStrip(rows) {
       const cats = new Set(rows.map(r => r.category).filter(Boolean));
@@ -1097,6 +1113,7 @@
           fetchJSON('/api/circulars'),
           fetchJSON('/api/changes'),
         ]);
+        rows.forEach(r => { r.category = formatCategory(r.category); });
         state.rows = rows;
         state.changelog = changelog;
         renderLedgerStrip(rows);
