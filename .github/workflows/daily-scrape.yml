@@ -3,10 +3,10 @@ name: Daily SBP circulars scrape
 on:
   schedule:
     # GitHub Actions schedules always run in UTC.
-    # 04:00 UTC = 09:00 AM Pakistan Time (PKT, UTC+5).
+    # 03:00 UTC = 08:00 AM Pakistan Time (PKT, UTC+5).
     # If you want a different local time, adjust this line and the
     # comment above it accordingly.
-    - cron: "0 4 * * *"
+    - cron: "0 3 * * *"
   workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
 
 permissions:
