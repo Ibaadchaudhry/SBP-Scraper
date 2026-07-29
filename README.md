@@ -115,7 +115,7 @@ $env:SBP_SMTP_HOST = "smtp.gmail.com"
 $env:SBP_SMTP_PORT = "587"
 $env:SBP_SMTP_USER = "yourname@gmail.com"
 $env:SBP_SMTP_PASS = "your-16-char-app-password"
-python scrape.py --alert-email "ibaad.ahmed@mobilinkbank.com"
+python scrape.py --alert-email "yourname@gmail.com"
 ```
 
 If `SBP_SMTP_HOST`/`USER`/`PASS` aren't set at all (neither locally
