@@ -36,7 +36,7 @@ jobs:
           SBP_SMTP_PORT: ${{ secrets.SBP_SMTP_PORT }}
           SBP_SMTP_USER: ${{ secrets.SBP_SMTP_USER }}
           SBP_SMTP_PASS: ${{ secrets.SBP_SMTP_PASS }}
-        run: python scrape.py --category "Microfinance" --alert-email "ibaad.ahmed@mobilinkbank.com"
+        run: python scrape.py --category "Microfinance" --alert-email "INsalman.ali@mobilinkbank.com"
         # Add more flags here if you need them, e.g.:
         #   python scrape.py --category "Microfinance" --department "BPRD"
         #
