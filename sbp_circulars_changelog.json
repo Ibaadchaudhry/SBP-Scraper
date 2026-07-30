@@ -1,26 +1,8 @@
 {
-  "checked_at": "2026-07-29T10:12:20.065416+00:00",
-  "old_count": 49,
+  "checked_at": "2026-07-30T10:55:07.513368+00:00",
+  "old_count": 47,
   "new_count": 47,
-  "changed": true,
-  "added": [
-    {
-      "title": "MICRO FINANCE RULES",
-      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-13-of-2002"
-    }
-  ],
-  "removed": [
-    {
-      "title": "Financing Facilities By Banks/DFIs to Microfinance Banks (MFBs) and Micro Finance Institutions (MFIs)",
-      "url": "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-15"
-    },
-    {
-      "title": "REVISED PRUDENTIAL REGULATIONS FOR MICROFINANCE BANKS (MFBS)",
-      "url": "https://www.sbp.org.pk/circulars/bprd-circular-no-01"
-    },
-    {
-      "title": "MICRO FINANCE INSTITUTIONS \u2013 BRANCH LICENSING POLICY",
-      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-18"
-    }
-  ]
+  "changed": false,
+  "added": [],
+  "removed": []
 }
