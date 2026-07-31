@@ -1,8 +1,13 @@
 {
-  "checked_at": "2026-07-30T10:55:07.513368+00:00",
-  "old_count": 47,
+  "checked_at": "2026-07-31T06:49:24.837467+00:00",
+  "old_count": 46,
   "new_count": 47,
-  "changed": false,
-  "added": [],
+  "changed": true,
+  "added": [
+    {
+      "title": "MICRO FINANCE RULES",
+      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-13-of-2002"
+    }
+  ],
   "removed": []
 }
