@@ -27,7 +27,7 @@ page has been read.
 
 ## Automated daily scrape (GitHub Actions)
 
-The scraper now runs automatically every day at **9:00 AM Pakistan
+The scraper now runs automatically every day at **8:00 AM Pakistan
 Time**, on GitHub's own servers — you don't need to keep your computer
 on or remember to run it yourself. This is set up in
 `.github/workflows/daily-scrape.yml`.
@@ -55,8 +55,8 @@ You can also trigger a run manually any time, without waiting for
 circulars scrape** → **Run workflow**.
 
 **A few things worth knowing:**
-- GitHub Actions schedules run in UTC. `0 4 * * *` in the workflow
-  file is 4:00 AM UTC, which is 9:00 AM PKT. If you ever move time
+- GitHub Actions schedules run in UTC. `0 3 * * *` in the workflow
+  file is 3:00 AM UTC, which is 8:00 AM PKT. If you ever move time
   zones or want a different time, edit that one line.
 - GitHub doesn't guarantee the *exact* minute for scheduled runs —
   during busy periods it can start a few minutes late. This is normal
