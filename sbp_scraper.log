@@ -236,3 +236,19 @@ Previous count: 46   New count: 47
 2026-08-03 13:31:29 [INFO] Scraped 47 circular row(s) from the site this run
 2026-08-03 13:31:29 [INFO] No change: counts and URLs match the previous run.
 2026-08-03 13:31:29 [INFO] Base file updated to this run's 47 row(s). Run finished OK.
+2026-08-04 11:35:57 [INFO] ============================================================
+2026-08-04 11:35:57 [INFO] Run started (output=sbp_circulars.csv, category='Microfinance', department='')
+2026-08-04 11:35:57 [INFO] Base file has 47 row(s) from the last run
+2026-08-04 11:36:26 [INFO] Scraped 45 circular row(s) from the site this run
+2026-08-04 11:36:26 [INFO] ============================================================
+CHANGE DETECTED since last run
+============================================================
+Previous count: 47   New count: 45
+
+- 2 removed:
+    - CREDIT RATING OF MICROFINANCE BANKS PRUDENTIAL REGULATION 29 FOR MICROFINANCE BANKS  (https://www.sbp.org.pk/circulars/bsd-circular-no-11)
+    - GUIDELINES FOR MOBILE BANKING OPERATIONS OF MICROFINANCE BANKS/ INSTITUTIONS  (https://www.sbp.org.pk/circulars/bsd-circular-no-10)
+============================================================
+2026-08-04 11:36:26 [INFO] Sending email alert to ibaad.ahmed@mobilinkbank.com ...
+2026-08-04 11:36:27 [INFO]   -> email sent.
+2026-08-04 11:36:27 [INFO] Base file updated to this run's 45 row(s). Run finished OK.
