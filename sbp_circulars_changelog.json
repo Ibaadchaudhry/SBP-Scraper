@@ -1,17 +1,8 @@
 {
-  "checked_at": "2026-08-04T11:36:27.546673+00:00",
-  "old_count": 47,
+  "checked_at": "2026-08-05T11:32:23.340741+00:00",
+  "old_count": 45,
   "new_count": 45,
-  "changed": true,
+  "changed": false,
   "added": [],
-  "removed": [
-    {
-      "title": "CREDIT RATING OF MICROFINANCE BANKS PRUDENTIAL REGULATION 29 FOR MICROFINANCE BANKS",
-      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-11"
-    },
-    {
-      "title": "GUIDELINES FOR MOBILE BANKING OPERATIONS OF MICROFINANCE BANKS/ INSTITUTIONS",
-      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-10"
-    }
-  ]
+  "removed": []
 }
