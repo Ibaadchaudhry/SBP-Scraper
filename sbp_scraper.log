@@ -264,3 +264,32 @@ Previous count: 47   New count: 45
 2026-08-06 11:37:34 [INFO] Scraped 45 circular row(s) from the site this run
 2026-08-06 11:37:34 [INFO] No change: counts and URLs match the previous run.
 2026-08-06 11:37:34 [INFO] Base file updated to this run's 45 row(s). Run finished OK.
+2026-08-07 06:54:51 [INFO] ============================================================
+2026-08-07 06:54:51 [INFO] Run started (output=sbp_circulars.csv, category='Microfinance', department='')
+2026-08-07 06:54:51 [INFO] Base file has 45 row(s) from the last run
+2026-08-07 06:55:43 [INFO] Scraped 30 circular row(s) from the site this run
+2026-08-07 06:55:43 [INFO] ============================================================
+CHANGE DETECTED since last run
+============================================================
+Previous count: 45   New count: 30
+
+- 15 removed:
+    - Special FCY Borrowing by Micro Finance Banks/Institutions(MFB/Is)  (https://www.sbp.org.pk/circulars/fe-circular-no-08-of-2009)
+    - Microfinance Credit Guarantee Facility (MCGF)  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-26-of-2009)
+    - Amendments in Microfinance Credit Guarantee Facility (“MCGF”)  (https://www.sbp.org.pk/circulars/bprd-circular-letter-no-19-of-2009)
+    - Amendments in Microfinance Credit Guarantee Facility (“MCGF”)  (https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2009)
+    - FINANCING FACILITIES BY BANKS/DFIs TO MICROFINANCE BANKS (MFBs) AND MICRO FINANCE INSTITUTIONS (MFIs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-15-of-2008)
+    - AMENDMENT IN REVISED PRUDENTIAL REGULATION FOR MICROFINANCE BANKs (MFBs)  (https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2008)
+    - Revised Prudential Regulations for Microfinance Banks (MFBS)  (https://www.sbp.org.pk/circulars/bprd-circular-no-01-of-2007)
+    - Submission of Periodical Returns and Minutes of Board of Directors’/General Meetings  (https://www.sbp.org.pk/circulars/mfd-circular-letter-no-1-of-2007)
+    - GUIDELINES FOR COMMERCIAL BANKS TO UNDERTAKE MICROFINANCE BUSINESS  (https://www.sbp.org.pk/circulars/smed-circular-no-11)
+    - Guidelines for Commercial Banks to Undertake Microfinance Business  (https://www.sbp.org.pk/circulars/smed-circular-no-10-of-2006)
+    - Prudential Regulations for Commercial Banks to undertake Micro Finance Business  (https://www.sbp.org.pk/circulars/smed-circular-no-11-of-2006)
+    - Amendments in Prudential Regulation Nos. 12 And 14 for Microfinance Banks (MFBs)  (https://www.sbp.org.pk/circulars/smed-circular-no-7-of-2006)
+    - Fit & Proper Criteria for Board Members and President/Chief Executive of Microfinance Banks  (https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2005)
+    - Guidelines For Mobile Banking Operations Of Microfinance Banks/ Institutions  (https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2003)
+    - MICRO FINANCE RULES  (https://www.sbp.org.pk/circulars/bsd-circular-no-13-of-2002)
+============================================================
+2026-08-07 06:55:43 [INFO] Sending email alert to ibaad.ahmed@mobilinkbank.com ...
+2026-08-07 06:55:45 [INFO]   -> email sent.
+2026-08-07 06:55:45 [INFO] Base file updated to this run's 30 row(s). Run finished OK.

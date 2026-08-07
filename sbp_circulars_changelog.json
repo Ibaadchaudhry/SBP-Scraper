@@ -1,8 +1,69 @@
 {
-  "checked_at": "2026-08-06T11:37:34.179777+00:00",
+  "checked_at": "2026-08-07T06:55:45.069080+00:00",
   "old_count": 45,
-  "new_count": 45,
-  "changed": false,
+  "new_count": 30,
+  "changed": true,
   "added": [],
-  "removed": []
+  "removed": [
+    {
+      "title": "Special FCY Borrowing by Micro Finance Banks/Institutions(MFB/Is)",
+      "url": "https://www.sbp.org.pk/circulars/fe-circular-no-08-of-2009"
+    },
+    {
+      "title": "Microfinance Credit Guarantee Facility (MCGF)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-26-of-2009"
+    },
+    {
+      "title": "Amendments in Microfinance Credit Guarantee Facility (\u201cMCGF\u201d)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-letter-no-19-of-2009"
+    },
+    {
+      "title": "Amendments in Microfinance Credit Guarantee Facility (\u201cMCGF\u201d)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2009"
+    },
+    {
+      "title": "FINANCING FACILITIES BY BANKS/DFIs TO MICROFINANCE BANKS (MFBs) AND MICRO FINANCE INSTITUTIONS (MFIs)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-no-15-of-2008"
+    },
+    {
+      "title": "AMENDMENT IN REVISED PRUDENTIAL REGULATION FOR MICROFINANCE BANKs (MFBs)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-no-10-of-2008"
+    },
+    {
+      "title": "Revised Prudential Regulations for Microfinance Banks (MFBS)",
+      "url": "https://www.sbp.org.pk/circulars/bprd-circular-no-01-of-2007"
+    },
+    {
+      "title": "Submission of Periodical Returns and Minutes of Board of Directors\u2019/General Meetings",
+      "url": "https://www.sbp.org.pk/circulars/mfd-circular-letter-no-1-of-2007"
+    },
+    {
+      "title": "GUIDELINES FOR COMMERCIAL BANKS TO UNDERTAKE MICROFINANCE BUSINESS",
+      "url": "https://www.sbp.org.pk/circulars/smed-circular-no-11"
+    },
+    {
+      "title": "Guidelines for Commercial Banks to Undertake Microfinance Business",
+      "url": "https://www.sbp.org.pk/circulars/smed-circular-no-10-of-2006"
+    },
+    {
+      "title": "Prudential Regulations for Commercial Banks to undertake Micro Finance Business",
+      "url": "https://www.sbp.org.pk/circulars/smed-circular-no-11-of-2006"
+    },
+    {
+      "title": "Amendments in Prudential Regulation Nos. 12 And 14 for Microfinance Banks (MFBs)",
+      "url": "https://www.sbp.org.pk/circulars/smed-circular-no-7-of-2006"
+    },
+    {
+      "title": "Fit & Proper Criteria for Board Members and President/Chief Executive of Microfinance Banks",
+      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2005"
+    },
+    {
+      "title": "Guidelines For Mobile Banking Operations Of Microfinance Banks/ Institutions",
+      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-2-of-2003"
+    },
+    {
+      "title": "MICRO FINANCE RULES",
+      "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-13-of-2002"
+    }
+  ]
 }
