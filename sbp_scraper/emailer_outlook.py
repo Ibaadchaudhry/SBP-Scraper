@@ -8,11 +8,13 @@ and already have Outlook signed in there.
 """
 
 
-def send_alert_email_outlook(to_address, subject, body):
-    """Send a plain-text email via Outlook. Returns True on success,
-    False if it couldn't be sent (missing pywin32, Outlook not
-    installed/running, not on Windows, etc.) -- callers should treat
-    False as non-fatal."""
+def send_alert_email_outlook(to_address, subject, body, body_html=None):
+    """Send an email via Outlook. Returns True on success, False if it
+    couldn't be sent (missing pywin32, Outlook not installed/running,
+    not on Windows, etc.) -- callers should treat False as non-fatal.
+
+    If body_html is given, it's sent as the HTML body (mail.HTMLBody);
+    otherwise falls back to the plain-text body."""
     try:
         import win32com.client as win32
     except ImportError:
@@ -24,7 +26,10 @@ def send_alert_email_outlook(to_address, subject, body):
         mail = outlook.CreateItem(0)  # 0 = olMailItem
         mail.To = to_address
         mail.Subject = subject
-        mail.Body = body
+        if body_html:
+            mail.HTMLBody = body_html
+        else:
+            mail.Body = body
         mail.Send()
         return True
     except Exception as e:

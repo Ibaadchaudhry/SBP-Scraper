@@ -17,7 +17,7 @@ from .emailer_outlook import send_alert_email_outlook
 from .emailer_smtp import send_alert_email_smtp, smtp_configured
 
 
-def send_alert_email(to_address, subject, body):
+def send_alert_email(to_address, subject, body, body_html=None):
     if smtp_configured():
-        return send_alert_email_smtp(to_address, subject, body)
-    return send_alert_email_outlook(to_address, subject, body)
+        return send_alert_email_smtp(to_address, subject, body, body_html=body_html)
+    return send_alert_email_outlook(to_address, subject, body, body_html=body_html)

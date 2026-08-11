@@ -74,6 +74,108 @@ def format_alert(diff):
     return "\n".join(lines)
 
 
+def _escape_html(value):
+    """Minimal HTML-escaping for values dropped into the template below."""
+    return (
+        str(value if value is not None else "")
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def _html_card(row, border_color):
+    title = _escape_html(row.get("title", ""))
+    url = _escape_html(row.get("url", ""))
+    meta_bits = [
+        _escape_html(row.get("circular_no", "")),
+        _escape_html(row.get("date", "")),
+        _escape_html(row.get("circular_type", "")),
+    ]
+    meta = " &nbsp;&middot;&nbsp; ".join(b for b in meta_bits if b)
+    link_html = (
+        f'<a href="{url}" style="color:#2563eb;text-decoration:none;font-weight:600;font-size:14px;">View circular &rarr;</a>'
+        if url
+        else ""
+    )
+    return f"""
+    <tr>
+      <td style="padding:16px 20px;border-left:3px solid {border_color};background:#ffffff;">
+        <div style="font-size:15px;font-weight:700;color:#111827;margin-bottom:4px;">{title}</div>
+        <div style="font-size:13px;color:#6b7280;margin-bottom:10px;">{meta}</div>
+        {link_html}
+      </td>
+    </tr>
+    <tr><td style="height:1px;background:#e5e7eb;line-height:1px;font-size:1px;">&nbsp;</td></tr>
+    """
+
+
+def format_alert_html(diff):
+    """Render the diff as an HTML alert email matching the 'SBP Circulars
+    Watch' card design (dark header, count summary, green 'added' /
+    red 'removed' sections)."""
+    old_count = diff["old_count"]
+    new_count = diff["new_count"]
+    delta = new_count - old_count
+    delta_str = f"+{delta}" if delta > 0 else str(delta)
+    delta_color = "#16a34a" if delta > 0 else ("#dc2626" if delta < 0 else "#6b7280")
+
+    added_rows = diff["added"]
+    removed_rows = diff["removed"]
+
+    sections = ""
+
+    if len(added_rows):
+        cards = "".join(_html_card(row, "#16a34a") for _, row in added_rows.iterrows())
+        sections += f"""
+        <tr><td style="padding:24px 20px 8px 20px;">
+          <span style="font-size:14px;font-weight:700;color:#111827;letter-spacing:0.02em;">NEW CIRCULARS</span>
+          <span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;">{len(added_rows)} added</span>
+        </td></tr>
+        <tr><td><table role="presentation" width="100%" cellpadding="0" cellspacing="0">{cards}</table></td></tr>
+        """
+
+    if len(removed_rows):
+        cards = "".join(_html_card(row, "#dc2626") for _, row in removed_rows.iterrows())
+        sections += f"""
+        <tr><td style="padding:24px 20px 8px 20px;">
+          <span style="font-size:14px;font-weight:700;color:#111827;letter-spacing:0.02em;">REMOVED</span>
+          <span style="background:#fee2e2;color:#991b1b;font-size:12px;font-weight:700;padding:3px 8px;border-radius:10px;margin-left:8px;">{len(removed_rows)} removed</span>
+        </td></tr>
+        <tr><td><table role="presentation" width="100%" cellpadding="0" cellspacing="0">{cards}</table></td></tr>
+        """
+
+    return f"""\
+<!DOCTYPE html>
+<html>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;padding:24px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb;">
+          <tr>
+            <td style="background:#0f2a4a;padding:28px 24px;">
+              <div style="color:#ffffff;font-size:20px;font-weight:700;">SBP Circulars Watch</div>
+              <div style="color:#c7d2e0;font-size:13px;margin-top:4px;">Change detected on the State Bank of Pakistan circulars page</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 20px 4px 20px;font-size:14px;color:#111827;">
+              Previous count: <strong>{old_count}</strong> &rarr; New count: <strong>{new_count}</strong>
+              &nbsp;<span style="color:{delta_color};font-weight:700;">({delta_str})</span>
+            </td>
+          </tr>
+          {sections}
+          <tr><td style="height:12px;"></td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"""
+
+
 def save_snapshot(output_path, new_rows):
     """Overwrite the base file with the latest fetch (de-duplicated by
     URL within itself, in case the same circular appeared on two

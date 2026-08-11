@@ -19,6 +19,7 @@ the workflow's env: block (already done in daily-scrape.yml).
 
 import os
 import smtplib
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
@@ -33,10 +34,15 @@ def smtp_configured():
     )
 
 
-def send_alert_email_smtp(to_address, subject, body):
-    """Send a plain-text email over SMTP. Returns True on success,
-    False otherwise (missing config, auth failure, network error,
-    etc.) -- callers should treat False as non-fatal."""
+def send_alert_email_smtp(to_address, subject, body, body_html=None):
+    """Send an email over SMTP. Returns True on success, False otherwise
+    (missing config, auth failure, network error, etc.) -- callers should
+    treat False as non-fatal.
+
+    If body_html is given, the message is sent as multipart/alternative
+    (plain-text `body` + `body_html`), so mail clients that render HTML
+    show the styled version and everything else falls back to plain
+    text. If body_html is omitted, a plain-text-only email is sent."""
     host = os.environ.get("SBP_SMTP_HOST")
     port = int(os.environ.get("SBP_SMTP_PORT", "587"))
     user = os.environ.get("SBP_SMTP_USER")
@@ -47,7 +53,15 @@ def send_alert_email_smtp(to_address, subject, body):
         print("  -> SMTP not configured (missing SBP_SMTP_HOST/USER/PASS); skipping.")
         return False
 
-    msg = MIMEText(body)
+    if body_html:
+        msg = MIMEMultipart("alternative")
+        # Attach plain text first, HTML last -- clients use the LAST
+        # part they understand, so HTML must come after plain text.
+        msg.attach(MIMEText(body, "plain"))
+        msg.attach(MIMEText(body_html, "html"))
+    else:
+        msg = MIMEText(body, "plain")
+
     msg["Subject"] = subject
     msg["From"] = from_addr
     msg["To"] = to_address

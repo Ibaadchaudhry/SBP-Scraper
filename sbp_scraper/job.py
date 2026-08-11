@@ -13,7 +13,7 @@ from .config import COLUMNS
 from .emailer import send_alert_email
 from .run_log import get_logger
 from .scraper import scrape_all
-from .storage import diff_snapshots, format_alert, load_existing, save_changelog, save_snapshot
+from .storage import diff_snapshots, format_alert, format_alert_html, load_existing, save_changelog, save_snapshot
 
 
 def run_scrape_job(output="sbp_circulars.csv", search_doc="", department="",
@@ -56,10 +56,12 @@ def run_scrape_job(output="sbp_circulars.csv", search_doc="", department="",
 
             if alert_email:
                 logger.info(f"Sending email alert to {alert_email} ...")
+                alert_html = format_alert_html(diff)
                 email_sent = send_alert_email(
                     to_address=alert_email,
                     subject=f"SBP Circulars: change detected ({diff['old_count']} -> {diff['new_count']})",
                     body="The SBP circulars scraper detected a change since the last run.\n\n" + alert_text,
+                    body_html=alert_html,
                 )
                 logger.info("  -> email sent." if email_sent else "  -> email not sent (see warning above).")
         else:
