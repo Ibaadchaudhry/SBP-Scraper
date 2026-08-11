@@ -326,3 +326,9 @@ Previous count: 29   New count: 30
 2026-08-11 05:53:17 [INFO] Sending email alert to ibaad.ahmed@mobilinkbank.com ...
 2026-08-11 05:53:21 [INFO]   -> email sent.
 2026-08-11 05:53:21 [INFO] Base file updated to this run's 30 row(s). Run finished OK.
+2026-08-11 06:02:17 [INFO] ============================================================
+2026-08-11 06:02:17 [INFO] Run started (output=sbp_circulars.csv, category='Microfinance', department='')
+2026-08-11 06:02:17 [INFO] Base file has 30 row(s) from the last run
+2026-08-11 06:02:50 [INFO] Scraped 30 circular row(s) from the site this run
+2026-08-11 06:02:50 [INFO] No change: counts and URLs match the previous run.
+2026-08-11 06:02:50 [INFO] Base file updated to this run's 30 row(s). Run finished OK.
