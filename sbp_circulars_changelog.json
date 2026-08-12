@@ -1,13 +1,8 @@
 {
-  "checked_at": "2026-08-11T06:10:06.934828+00:00",
-  "old_count": 29,
+  "checked_at": "2026-08-12T07:01:08.559545+00:00",
+  "old_count": 30,
   "new_count": 30,
-  "changed": true,
-  "added": [
-    {
-      "title": "Relief Measures for Borrowers of Floods Affected Areas",
-      "url": "https://www.sbp.org.pk/circulars/mfd-circular-no-06-2010"
-    }
-  ],
+  "changed": false,
+  "added": [],
   "removed": []
 }
