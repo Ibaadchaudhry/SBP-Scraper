@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -8,54 +8,158 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <style>
-    /* ============ TOKENS ============ */
     :root {
-      --ink-bg: #0a0d09;
-      --paper-card: #12160f;
-      --paper-card-raised: #161b13;
-      --hairline: rgba(240, 237, 225, 0.10);
-      --hairline-strong: rgba(240, 237, 225, 0.18);
+      --bg-page: #f6f8fa;
+      --bg-card: rgba(255, 255, 255, 0.82);
+      --bg-card-solid: #ffffff;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(16, 185, 129, 0.35);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-green: #059669;
+      --accent-green-bg: rgba(5, 150, 105, 0.08);
+      --accent-green-glow: rgba(5, 150, 105, 0.18);
+      --accent-gold: #d97706;
+      --accent-gold-bg: rgba(217, 119, 6, 0.1);
+      --accent-red: #dc2626;
+      --accent-red-bg: rgba(220, 38, 38, 0.1);
+      --header-bg: #091e15;
+      --header-text: #f8fafc;
+      --input-bg: rgba(255, 255, 255, 0.9);
+      --table-hover: rgba(5, 150, 105, 0.04);
+      --logbook-bg: #0c1a13;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --spotlight-color: rgba(5, 150, 105, 0.15);
+      --spotlight-border: rgba(5, 150, 105, 0.35);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    html.dark {
+      --bg-page: #070a0d;
+      --bg-card: rgba(15, 23, 42, 0.7);
+      --bg-card-solid: #0f172a;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(16, 185, 129, 0.4);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-green: #10b981;
+      --accent-green-bg: rgba(16, 185, 129, 0.12);
+      --accent-green-glow: rgba(16, 185, 129, 0.25);
+      --accent-gold: #fbbf24;
+      --accent-gold-bg: rgba(251, 191, 36, 0.12);
+      --accent-red: #f87171;
+      --accent-red-bg: rgba(248, 113, 113, 0.12);
+      --header-bg: #03070a;
+      --header-text: #f8fafc;
+      --input-bg: rgba(15, 23, 42, 0.8);
+      --table-hover: rgba(16, 185, 129, 0.06);
+      --logbook-bg: #030806;
+      --spotlight-color: rgba(16, 185, 129, 0.12);
+      --spotlight-border: rgba(16, 185, 129, 0.45);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+
+      /* Gazette-top tokens (masthead / bulletin / ledger strip only) */
       --bone: #f2efe3;
       --bone-muted: #9a9a89;
       --bone-faint: #6c6c5e;
+      --hairline: rgba(240, 237, 225, 0.10);
+      --hairline-strong: rgba(240, 237, 225, 0.18);
       --seal-gold: #cc9f35;
       --seal-gold-bg: rgba(204, 159, 53, 0.10);
       --seal-red: #b1462f;
       --seal-red-bg: rgba(177, 70, 47, 0.10);
       --seal-green: #4d8161;
       --seal-green-bg: rgba(77, 129, 97, 0.12);
-      --radius: 10px;
-      --radius-lg: 16px;
-      --shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
     }
 
-    * { box-sizing: border-box; }
-    ::selection { background: var(--seal-gold-bg); color: var(--seal-gold); }
+    * {
+      box-sizing: border-box;
+    }
+
+    ::selection {
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+    }
 
     body {
       margin: 0;
-      background:
-        radial-gradient(ellipse 900px 500px at 50% -10%, rgba(77, 129, 97, 0.08), transparent 60%),
-        var(--ink-bg);
-      color: var(--bone);
-      font-family: "Inter", -apple-system, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
       min-height: 100vh;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 15% 15%, var(--accent-green-bg) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+      z-index: 0;
     }
 
-    /* ============ MASTHEAD ============ */
+    .spotlight-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .spotlight-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px circle at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
+          var(--spotlight-color),
+          transparent 40%);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .spotlight-card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius) + 1px);
+      padding: 1px;
+      background: radial-gradient(400px circle at var(--mouse-x, -9999px) var(--mouse-y, -9999px),
+          var(--spotlight-border),
+          transparent 40%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .spotlight-card:hover::before,
+    .spotlight-card:hover::after {
+      opacity: 1;
+    }
+
     .masthead {
       text-align: center;
       padding: 40px 24px 28px;
       border-bottom: 1px solid var(--hairline);
       position: relative;
+      z-index: 10;
     }
 
     .dateline {
@@ -77,6 +181,7 @@
       letter-spacing: -0.01em;
       margin: 0;
       line-height: 1;
+      color: var(--bone);
     }
 
     .masthead .subtitle {
@@ -86,6 +191,8 @@
       font-size: 1rem;
       color: var(--bone-muted);
       margin-top: 10px;
+      text-transform: none;
+      letter-spacing: normal;
     }
 
     .header-actions {
@@ -104,7 +211,7 @@
       letter-spacing: 0.06em;
     }
 
-    .stamp-status {
+    .stamp {
       display: inline-flex;
       align-items: center;
       gap: 7px;
@@ -118,48 +225,100 @@
       background: var(--seal-green-bg);
     }
 
-    .stamp-status.stale { color: var(--seal-gold); background: var(--seal-gold-bg); }
-
-    .stamp-status .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: currentColor; box-shadow: 0 0 6px currentColor;
+    .stamp .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex: none;
+      box-shadow: 0 0 6px currentColor;
     }
 
-    .stamp-status.live .dot { animation: pulse-dot 2.2s ease-in-out infinite; }
+    .stamp.live {
+      color: var(--seal-green);
+      border-color: var(--hairline-strong);
+      background: var(--seal-green-bg);
+    }
+
+    .stamp.stale {
+      color: var(--seal-gold);
+      border-color: var(--hairline-strong);
+      background: var(--seal-gold-bg);
+    }
+
+    @media (max-width: 640px) {
+      .header-actions { position: static; justify-content: center; margin-top: 16px; }
+      .masthead { padding: 28px 16px 24px; }
+    }
 
     main {
-      max-width: 980px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 40px 24px 72px;
+      padding: 32px 24px 64px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ============ SIGNATURE: HERO BULLETIN ============ */
-    .bulletin {
+    .ledger-strip {
+      display: flex;
+      flex-wrap: wrap;
+      border: 1px solid var(--hairline);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .ledger-cell {
+      flex: 1 1 140px;
+      padding: 12px 18px;
+      border-right: 1px solid var(--hairline);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .ledger-cell:last-child { border-right: none; }
+
+    .ledger-cell .num {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--bone);
+      line-height: 1.1;
+    }
+
+    .ledger-cell .label {
+      font-size: 0.68rem;
+      font-family: "JetBrains Mono", monospace;
+      color: var(--bone-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .activity {
       border: 1px solid var(--hairline-strong);
-      border-radius: var(--radius-lg);
-      background: var(--paper-card-raised);
-      box-shadow: var(--shadow);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
       padding: 28px 32px;
       margin-bottom: 20px;
       position: relative;
       overflow: hidden;
-      animation: settleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
-    .bulletin::before {
+    .activity::before {
       content: "";
       position: absolute; inset: 0 0 auto 0; height: 3px;
       background: linear-gradient(90deg, var(--seal-gold), transparent 60%);
       opacity: 0.7;
     }
 
-    .bulletin.quiet::before { background: linear-gradient(90deg, var(--seal-green), transparent 60%); }
+    .activity.quiet::before { background: linear-gradient(90deg, var(--seal-green), transparent 60%); }
 
-    .bulletin-head {
+    .activity-head {
       display: flex;
       align-items: flex-start;
       gap: 18px;
-      margin-bottom: 4px;
     }
 
     .seal {
@@ -183,36 +342,37 @@
       border-radius: 50%;
     }
 
-    .bulletin.quiet .seal {
+    .activity.quiet .seal {
       border-color: var(--seal-green);
       color: var(--seal-green);
       background: var(--seal-green-bg);
     }
 
-    .bulletin.quiet .seal::after { border-color: rgba(77, 129, 97, 0.35); }
+    .activity.quiet .seal::after { border-color: rgba(77, 129, 97, 0.35); }
 
-    .bulletin h2 {
+    .activity h2 {
       font-family: "Fraunces", serif;
       font-weight: 600;
       font-size: 1.5rem;
       margin: 4px 0 4px;
       line-height: 1.15;
+      color: var(--bone);
     }
 
-    .bulletin .meta {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
+    .activity .meta {
+      font-size: 0.8rem;
       color: var(--bone-faint);
+      font-family: "JetBrains Mono", monospace;
     }
 
-    .bulletin ul {
+    .activity ul {
       list-style: none;
       margin: 18px 0 0;
       padding: 16px 0 0;
       border-top: 1px dashed var(--hairline-strong);
     }
 
-    .bulletin li {
+    .activity li {
       display: flex;
       align-items: baseline;
       gap: 12px;
@@ -220,7 +380,7 @@
       font-size: 0.92rem;
     }
 
-    .chit {
+    .tag {
       font-family: "JetBrains Mono", monospace;
       font-size: 0.64rem;
       letter-spacing: 0.06em;
@@ -231,67 +391,42 @@
       font-weight: 600;
     }
 
-    .chit.added { background: var(--seal-gold-bg); color: var(--seal-gold); border: 1px solid rgba(204, 159, 53, 0.3); }
-    .chit.removed { background: var(--seal-red-bg); color: var(--seal-red); border: 1px solid rgba(177, 70, 47, 0.3); }
+    .tag.added {
+      background: var(--seal-gold-bg);
+      color: var(--seal-gold);
+      border: 1px solid rgba(204, 159, 53, 0.3);
+    }
 
-    .bulletin li.removed-item span.title { color: var(--bone-faint); text-decoration: line-through; text-decoration-color: rgba(177,70,47,0.4); }
+    .tag.removed {
+      background: var(--seal-red-bg);
+      color: var(--seal-red);
+      border: 1px solid rgba(177, 70, 47, 0.3);
+    }
 
-    .bulletin a {
+    .activity a {
       color: var(--bone);
       text-decoration: none;
       border-bottom: 1px solid var(--hairline-strong);
-    }
-    .bulletin a:hover { color: var(--seal-gold); border-color: var(--seal-gold); }
-
-    /* ============ LEDGER STRIP (demoted) ============ */
-    .ledger-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0;
-      border: 1px solid var(--hairline);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 24px;
-      background: var(--paper-card);
+      transition: border-color 0.2s ease;
     }
 
-    .ledger-cell {
-      flex: 1 1 140px;
-      padding: 12px 18px;
-      border-right: 1px solid var(--hairline);
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
+    .activity a:hover {
+      border-color: var(--seal-gold);
+      color: var(--seal-gold);
     }
 
-    .ledger-cell:last-child { border-right: none; }
-
-    .ledger-cell .num {
-      font-family: "JetBrains Mono", monospace;
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--bone);
-    }
-
-    .ledger-cell .label {
-      font-size: 0.68rem;
-      font-family: "JetBrains Mono", monospace;
-      color: var(--bone-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* ============ CONTROLS ============ */
     .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       padding: 14px 16px;
       border: 1px solid var(--hairline);
-      border-radius: var(--radius);
-      background: var(--paper-card);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.015);
+      position: relative;
+      z-index: 2;
     }
 
     .controls input[type="text"],
@@ -302,21 +437,29 @@
       padding: 9px 12px;
       border: 1px solid var(--hairline-strong);
       border-radius: 6px;
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       color: var(--bone);
       outline: none;
       transition: border-color 0.2s ease;
     }
 
-    .controls input:focus, .controls select:focus {
+    .controls input[type="text"]:focus,
+    .controls select:focus,
+    .controls input[type="date"]:focus {
       border-color: var(--seal-green);
+      box-shadow: none;
     }
 
-    .controls input[type="text"] { flex: 1 1 220px; }
+    .controls input[type="text"] {
+      flex: 1 1 240px;
+    }
 
     .controls .date-group {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 0.78rem; color: var(--bone-faint);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--bone-faint);
       font-family: "JetBrains Mono", monospace;
     }
 
@@ -333,166 +476,347 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
+      box-shadow: none;
     }
 
-    .controls button:hover { background: var(--seal-green); color: var(--ink-bg); }
+    .controls button:hover {
+      transform: none;
+      background: var(--seal-green);
+      color: var(--ink-bg, #0a0d09);
+      box-shadow: none;
+    }
 
     .controls button.ghost {
-      background: transparent; color: var(--bone-muted); border-color: var(--hairline-strong);
+      background: transparent;
+      color: var(--bone-muted);
+      border-color: var(--hairline-strong);
+      box-shadow: none;
     }
-    .controls button.ghost:hover { border-color: var(--bone-muted); color: var(--bone); background: transparent; }
+
+    .controls button.ghost:hover {
+      background: transparent;
+      border-color: var(--bone-muted);
+      color: var(--bone);
+    }
 
     .controls label.toggle {
-      display: flex; align-items: center; gap: 7px;
-      font-size: 0.78rem; color: var(--bone-faint); cursor: pointer;
-      font-family: "JetBrains Mono", monospace; user-select: none;
-    }
-
-    /* ============ TIMELINE TABLE ============ */
-    .month-divider {
-      font-family: "Fraunces", serif;
-      font-style: italic;
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: var(--bone-muted);
-      padding: 22px 4px 8px;
-      border-bottom: 1px solid var(--hairline);
-      margin-bottom: 4px;
-    }
-
-    .month-divider:first-child { padding-top: 4px; }
-
-    .filing-row {
-      display: grid;
-      grid-template-columns: 1fr auto auto auto;
-      gap: 16px;
+      display: flex;
       align-items: center;
-      padding: 14px 6px;
-      border-bottom: 1px solid var(--hairline);
+      gap: 7px;
+      font-size: 0.78rem;
+      color: var(--bone-faint);
+      cursor: pointer;
+      font-family: "JetBrains Mono", monospace;
+      user-select: none;
+    }
+
+    .controls button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .table-wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    thead th {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      background: rgba(0, 0, 0, 0.02);
+      transition: color 0.2s ease;
+    }
+
+    thead th:hover {
+      color: var(--text-primary);
+    }
+
+    thead th .arrow {
+      opacity: 0.5;
+      font-size: 0.7rem;
+      margin-left: 6px;
+      color: var(--accent-green);
+    }
+
+    tbody td {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      vertical-align: middle;
       transition: background 0.15s ease;
     }
 
-    .filing-row:hover { background: rgba(255,255,255,0.015); }
-
-    .filing-row.is-new {
-      animation: newEntry 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    tbody tr:hover td {
+      background: var(--table-hover);
     }
 
-    .filing-row .title a {
-      color: var(--bone);
+    td.date,
+    td.circno {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      white-space: nowrap;
+      color: var(--text-secondary);
+    }
+
+    td.title a {
+      color: var(--text-primary);
       text-decoration: none;
-      font-size: 0.94rem;
       font-weight: 500;
-      line-height: 1.35;
+      transition: color 0.2s ease;
     }
 
-    .filing-row .title a:hover { color: var(--seal-gold); text-decoration: underline; }
-
-    .filing-row .circno {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
-      color: var(--bone-faint);
-      white-space: nowrap;
+    td.title a:hover {
+      color: var(--accent-green);
+      text-decoration: underline;
     }
 
-    .filing-row .date {
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.76rem;
-      color: var(--bone-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--accent-green-bg);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.2);
       white-space: nowrap;
-    }
-
-    .chip-group { display: flex; gap: 6px; }
-
-    .chip {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.66rem;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--hairline-strong);
-      color: var(--bone-muted);
-      white-space: nowrap;
-      max-width: 160px;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: 180px;
     }
 
-    .chip.category { border-color: rgba(77, 129, 97, 0.35); color: var(--seal-green); }
-
-    thead-labels {
-      display: grid;
-      grid-template-columns: 1fr auto auto auto;
-      gap: 16px;
-      padding: 0 6px 8px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.66rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--bone-faint);
-      cursor: pointer;
+    td.category-col {
+      width: 200px;
+      max-width: 200px;
     }
-
-    .thead-labels span:hover { color: var(--bone); }
-    .thead-labels .arrow { opacity: 0.6; margin-left: 4px; color: var(--seal-gold); }
 
     .empty {
-      padding: 56px 24px;
+      padding: 64px 24px;
       text-align: center;
-      color: var(--bone-muted);
+      color: var(--text-muted);
     }
 
-    .empty .plate {
-      font-family: "Fraunces", serif;
-      font-weight: 600;
-      font-size: 1rem;
-      border: 1px solid var(--seal-red);
-      color: var(--seal-red);
-      background: var(--seal-red-bg);
+    .empty .stamp-big {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.2rem;
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      background: var(--accent-red-bg);
       display: inline-block;
-      padding: 8px 20px;
+      padding: 10px 24px;
       border-radius: 999px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+      font-weight: 600;
     }
 
     footer {
-      max-width: 980px;
+      max-width: 1240px;
       margin: 32px auto 0;
-      padding: 24px 24px 0;
-      font-size: 0.74rem;
-      color: var(--bone-faint);
+      padding: 0 24px 32px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
       font-family: "JetBrains Mono", monospace;
-      border-top: 1px solid var(--hairline);
-      text-align: center;
-      letter-spacing: 0.04em;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
     }
 
-    @media (max-width: 640px) {
-      .header-actions { position: static; justify-content: center; margin-top: 16px; }
-      .masthead { padding: 28px 16px 24px; }
-      .controls { flex-direction: column; align-items: stretch; }
-      .controls input[type="text"] { flex: 1 1 100%; }
-      .filing-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 4px; }
-      .thead-labels { display: none; }
-      .chip-group { margin-top: 4px; }
+    @media (max-width: 768px) {
+      .masthead {
+        padding: 20px;
+      }
+
+      main {
+        padding: 20px 16px 48px;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls input[type="text"] {
+        flex: 1 1 100%;
+      }
+
+      .date-group {
+        justify-content: space-between;
+      }
+
+      thead {
+        display: none;
+      }
+
+      table,
+      tbody,
+      tr,
+      td {
+        display: block;
+        width: 100%;
+      }
+
+      tbody tr {
+        border-top: 1px solid var(--border-color);
+        padding: 12px 0;
+      }
+
+      tbody td {
+        border-top: none;
+        padding: 6px 16px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
     }
 
-    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
-      outline: 2px solid var(--seal-green);
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--accent-green);
       outline-offset: 2px;
     }
 
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
-    }
-    @keyframes settleIn {
-      from { opacity: 0; transform: translateY(-8px); }
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    @keyframes newEntry {
-      0%   { opacity: 0; transform: translateY(-6px); background: rgba(204, 159, 53, 0.14); }
-      60%  { opacity: 1; transform: translateY(0); background: rgba(204, 159, 53, 0.10); }
-      100% { background: transparent; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
+      50%       { opacity: 0.4; box-shadow: 0 0 2px currentColor; }
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.85) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .masthead {
+      animation: fadeSlideDown 0.5s ease both;
+    }
+
+    .ledger-strip {
+      animation: fadeSlideUp 0.5s ease 0.1s both;
+    }
+
+    .controls {
+      animation: fadeSlideUp 0.5s ease 0.2s both;
+    }
+
+    .table-wrap {
+      animation: fadeSlideUp 0.5s ease 0.3s both;
+    }
+
+    footer {
+      animation: fadeIn 0.6s ease 0.5s both;
+    }
+
+    .ledger-cell .num {
+      animation: countUp 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both;
+    }
+
+    .stamp.live .dot {
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    tbody tr {
+      animation: rowIn 0.3s ease both;
+    }
+
+    tbody tr:nth-child(1)  { animation-delay: 0.05s; }
+    tbody tr:nth-child(2)  { animation-delay: 0.10s; }
+    tbody tr:nth-child(3)  { animation-delay: 0.15s; }
+    tbody tr:nth-child(4)  { animation-delay: 0.20s; }
+    tbody tr:nth-child(5)  { animation-delay: 0.25s; }
+    tbody tr:nth-child(6)  { animation-delay: 0.30s; }
+    tbody tr:nth-child(7)  { animation-delay: 0.35s; }
+    tbody tr:nth-child(8)  { animation-delay: 0.40s; }
+    tbody tr:nth-child(9)  { animation-delay: 0.45s; }
+    tbody tr:nth-child(10) { animation-delay: 0.50s; }
+
+    tbody tr {
+      transition: transform 0.18s ease;
+    }
+
+    tbody tr:hover {
+      transform: translateX(3px);
+    }
+
+    .pill {
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pill:hover {
+      box-shadow: 0 0 10px var(--accent-green-glow);
+      background: rgba(16, 185, 129, 0.22);
+    }
+
+    .controls button:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .masthead .brand-title span.badge {
+      background: linear-gradient(
+        90deg,
+        var(--accent-green-bg) 0%,
+        rgba(16, 185, 129, 0.3) 50%,
+        var(--accent-green-bg) 100%
+      );
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+    }
+
+    .spotlight-card {
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
+    }
+
+    .spotlight-card:hover {
+      transform: translateY(-2px);
+    }
+
   </style>
 </head>
 
@@ -501,7 +825,7 @@
   <div class="masthead">
     <div class="header-actions">
       <span class="theme-note">DARK LEDGER</span>
-      <div id="syncStamp" class="stamp-status live"><span class="dot"></span>Connecting…</div>
+      <div id="syncStamp" class="stamp live"><span class="dot"></span>Connecting…</div>
     </div>
     <div class="dateline">State Bank of Pakistan<span class="sep">·</span>Filing Intelligence<span class="sep">·</span>Issued Continuously</div>
     <h1>Circular Register</h1>
@@ -510,14 +834,18 @@
 
   <main>
 
-    <div id="bulletin"></div>
+    <div id="activitySection"></div>
 
     <div id="ledgerStrip" class="ledger-strip"></div>
 
     <div class="controls">
       <input type="text" id="searchBox" placeholder="Search title or circular no.">
-      <select id="categoryFilter"><option value="">All categories</option></select>
-      <select id="typeFilter"><option value="">All circular types</option></select>
+      <select id="categoryFilter">
+        <option value="">All categories</option>
+      </select>
+      <select id="typeFilter">
+        <option value="">All circular types</option>
+      </select>
       <div class="date-group">
         from <input type="date" id="dateFrom">
         to <input type="date" id="dateTo">
@@ -527,22 +855,42 @@
       <button id="refreshBtn" type="button">Reload</button>
     </div>
 
-    <div class="thead-labels" id="theadLabels">
-      <span data-key="title">Title<span class="arrow"></span></span>
-      <span data-key="circular_no">No.<span class="arrow"></span></span>
-      <span data-key="date">Date<span class="arrow"></span></span>
-      <span>Category / Type</span>
+    <div class="table-wrap spotlight-card">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th data-key="title">Title <span class="arrow"></span></th>
+            <th data-key="circular_no">No. <span class="arrow"></span></th>
+            <th data-key="date">Date <span class="arrow"></span></th>
+            <th data-key="category">Category <span class="arrow"></span></th>
+            <th data-key="circular_type">Type <span class="arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty" style="display:none;"></div>
     </div>
-
-    <div id="tableBody"></div>
-    <div id="emptyState" class="empty" style="display:none;"></div>
 
   </main>
 
-  <footer>State Bank of Pakistan Live Filing Monitor</footer>
+  <footer>
+    <div>State Bank of Pakistan Live Filing Monitor</div>
+  </footer>
 
   <script>
-    const state = { rows: [], sortKey: 'date', sortDir: 'desc', changelog: null, seenUrls: new Set(), firstLoad: true };
+    const state = { rows: [], sortKey: 'date', sortDir: 'desc', changelog: null };
+
+    function initSpotlightEffect() {
+      document.querySelectorAll('.spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--mouse-x', `${x}px`);
+          card.style.setProperty('--mouse-y', `${y}px`);
+        });
+      });
+    }
 
     const MONTHS = { January: 0, February: 1, March: 2, April: 3, May: 4, June: 5, July: 6, August: 7, September: 8, October: 9, November: 10, December: 11 };
     function parseDate(str) {
@@ -560,7 +908,7 @@
 
     function setStamp(ok, text) {
       const el = document.getElementById('syncStamp');
-      el.className = 'stamp-status ' + (ok ? 'live' : 'stale');
+      el.className = 'stamp ' + (ok ? 'live' : 'stale');
       el.innerHTML = '<span class="dot"></span>' + text;
     }
 
@@ -568,43 +916,11 @@
       if (!raw) return '';
       const parts = raw.split('/').map(p => p.trim()).filter(Boolean);
       if (parts.length === 0) return '';
-      const [fullName] = parts;
-      if (fullName && !/^[A-Z0-9]{2,8}$/.test(fullName)) return fullName;
-      return parts.join(' / ');
-    }
-
-    function renderBulletin(cl) {
-      const el = document.getElementById('bulletin');
-      if (!cl || !cl.changed) {
-        el.innerHTML = `
-          <div class="bulletin quiet">
-            <div class="bulletin-head">
-              <div class="seal">✓</div>
-              <div>
-                <h2>No change on last check</h2>
-                <div class="meta">${cl && cl.checked_at ? 'Last checked ' + new Date(cl.checked_at).toLocaleString() : 'Waiting for first scrape run.'}</div>
-              </div>
-            </div>
-          </div>`;
-        return;
+      const [fullName, ...rest] = parts;
+      if (fullName && !/^[A-Z0-9]{2,8}$/.test(fullName)) {
+        return fullName;
       }
-      const addedCount = (cl.added || []).length;
-      const removedCount = (cl.removed || []).length;
-      const items = [
-        ...(cl.added || []).map(r => `<li><span class="chit added">New</span><a href="${r.url}" target="_blank" rel="noopener" class="title">${r.title}</a></li>`),
-        ...(cl.removed || []).map(r => `<li class="removed-item"><span class="chit removed">Gone</span><span class="title">${r.title}</span></li>`),
-      ].join('');
-      el.innerHTML = `
-        <div class="bulletin">
-          <div class="bulletin-head">
-            <div class="seal">${addedCount}</div>
-            <div>
-              <h2>${addedCount} new filing${addedCount === 1 ? '' : 's'}${removedCount ? `, ${removedCount} removed` : ''}</h2>
-              <div class="meta">Checked ${new Date(cl.checked_at).toLocaleString()} · ${cl.old_count} → ${cl.new_count} total</div>
-            </div>
-          </div>
-          <ul>${items}</ul>
-        </div>`;
+      return parts.join(' / ');
     }
 
     function renderLedgerStrip(rows) {
@@ -614,12 +930,49 @@
       const cells = [
         [rows.length, 'Total Filings'],
         [cats.size, 'Categories'],
-        [dates.length ? fmt(dates[0]) : '—', 'Earliest'],
-        [dates.length ? fmt(dates[dates.length - 1]) : '—', 'Latest'],
+        [dates.length ? fmt(dates[0]) : '—', 'Earliest Entry'],
+        [dates.length ? fmt(dates[dates.length - 1]) : '—', 'Latest Entry'],
       ];
       document.getElementById('ledgerStrip').innerHTML = cells.map(([num, label]) => `
-        <div class="ledger-cell"><span class="num">${num}</span><span class="label">${label}</span></div>
-      `).join('');
+    <div class="ledger-cell">
+      <span class="num">${num}</span>
+      <span class="label">${label}</span>
+    </div>
+  `).join('');
+    }
+
+    function renderActivity(cl) {
+      const el = document.getElementById('activitySection');
+      if (!cl || !cl.changed) {
+        el.innerHTML = `
+      <div class="activity quiet">
+        <div class="activity-head">
+          <div class="seal">✓</div>
+          <div>
+            <h2>No change on last check</h2>
+            <div class="meta">${cl && cl.checked_at ? 'Last checked ' + new Date(cl.checked_at).toLocaleString() : 'Waiting for first scrape run.'}</div>
+          </div>
+        </div>
+      </div>`;
+        return;
+      }
+      const addedCount = (cl.added || []).length;
+      const removedCount = (cl.removed || []).length;
+      const items = [
+        ...(cl.added || []).map(r => `<li><span class="tag added">New</span><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a></li>`),
+        ...(cl.removed || []).map(r => `<li><span class="tag removed">Removed</span><span>${r.title}</span></li>`),
+      ].join('');
+      el.innerHTML = `
+    <div class="activity">
+      <div class="activity-head">
+        <div class="seal">${addedCount}</div>
+        <div>
+          <h2>${addedCount} new filing${addedCount === 1 ? '' : 's'}${removedCount ? `, ${removedCount} removed` : ''}</h2>
+          <div class="meta">Checked ${new Date(cl.checked_at).toLocaleString()} · ${cl.old_count} → ${cl.new_count} filings</div>
+        </div>
+      </div>
+      <ul>${items}</ul>
+    </div>`;
     }
 
     function populateFilters(rows) {
@@ -627,15 +980,12 @@
       const typeSel = document.getElementById('typeFilter');
       const cats = [...new Set(rows.map(r => r.category).filter(Boolean))].sort();
       const types = [...new Set(rows.map(r => r.circular_type).filter(Boolean))].sort();
+
       catSel.innerHTML = '<option value="">All categories</option>';
       cats.forEach(c => catSel.appendChild(new Option(c, c)));
+
       typeSel.innerHTML = '<option value="">All circular types</option>';
       types.forEach(t => typeSel.appendChild(new Option(t, t)));
-    }
-
-    function monthLabel(d) {
-      if (!d) return 'Undated';
-      return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     }
 
     function applyFiltersAndRender() {
@@ -664,42 +1014,32 @@
         return 0;
       });
 
-      const container = document.getElementById('tableBody');
+      const tbody = document.getElementById('tableBody');
       const empty = document.getElementById('emptyState');
       if (rows.length === 0) {
-        container.innerHTML = '';
+        tbody.innerHTML = '';
         empty.style.display = 'block';
         empty.innerHTML = state.rows.length === 0
-          ? '<div class="plate">No data loaded</div><div>Run the scraper, then reload to see live filings here.</div>'
-          : '<div class="plate">No matches found</div><div>Nothing in the register matches your current filter criteria.</div>';
-        document.getElementById('theadLabels').style.display = 'none';
+          ? '<div class="stamp-big">No data loaded</div><div>Run the scraper, then start the dashboard server to see live filings here.</div>'
+          : '<div class="stamp-big">No matches found</div><div>Nothing in the register matches your current filter criteria.</div>';
         return;
       }
       empty.style.display = 'none';
-      document.getElementById('theadLabels').style.display = '';
-
-      let html = '';
-      let lastMonth = null;
-      rows.forEach(r => {
-        const d = parseDate(r.date);
-        const label = monthLabel(d);
-        if (label !== lastMonth && state.sortKey === 'date') {
-          html += `<div class="month-divider">${label}</div>`;
-          lastMonth = label;
-        }
-        const isNew = !state.firstLoad && r.url && !state.seenUrls.has(r.url);
-        html += `
-          <div class="filing-row${isNew ? ' is-new' : ''}">
-            <div class="title"><a href="${r.url}" target="_blank" rel="noopener">${r.title || 'Untitled'}</a></div>
-            <div class="circno">${r.circular_no || '—'}</div>
-            <div class="date">${r.date || '—'}</div>
-            <div class="chip-group">
-              ${r.category ? `<span class="chip category" title="${r.category}">${r.category}</span>` : ''}
-              ${r.circular_type ? `<span class="chip" title="${r.circular_type}">${r.circular_type}</span>` : ''}
-            </div>
-          </div>`;
+      tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td class="title"><a href="${r.url}" target="_blank" rel="noopener">${r.title || 'Untitled'}</a></td>
+      <td class="circno">${r.circular_no || '—'}</td>
+      <td class="date">${r.date || '—'}</td>
+      <td class="category-col"><span class="pill" title="${r.category || ''}">${r.category || '—'}</span></td>
+      <td>${r.circular_type || '—'}</td>
+    </tr>
+  `).join('');
+      tbody.querySelectorAll('tr').forEach((tr, i) => {
+        tr.style.animation = 'none';
+        tr.offsetHeight;
+        tr.style.animation = '';
+        tr.style.animationDelay = `${Math.min(i, 10) * 0.05}s`;
       });
-      container.innerHTML = html;
     }
 
     async function loadData() {
@@ -712,30 +1052,27 @@
         rows.forEach(r => { r.category = formatCategory(r.category); });
         state.rows = rows;
         state.changelog = changelog;
-        renderBulletin(changelog);
         renderLedgerStrip(rows);
+        renderActivity(changelog);
         populateFilters(rows);
         applyFiltersAndRender();
-        rows.forEach(r => { if (r.url) state.seenUrls.add(r.url); });
-        state.firstLoad = false;
         setStamp(true, 'Live · synced ' + new Date().toLocaleTimeString());
       } catch (err) {
         setStamp(false, 'Server unreachable');
         document.getElementById('emptyState').style.display = 'block';
         document.getElementById('emptyState').innerHTML =
-          '<div class="plate">Not connected</div><div>Start the server with <code>python -m sbp_scraper.dashboard_server</code>, then refresh.</div>';
+          '<div class="stamp-big">Not connected</div><div>Start the server with <code>python -m sbp_scraper.dashboard_server</code>, then refresh.</div>';
         document.getElementById('tableBody').innerHTML = '';
-        document.getElementById('theadLabels').style.display = 'none';
       }
     }
 
-    document.querySelectorAll('#theadLabels [data-key]').forEach(el => {
-      el.addEventListener('click', () => {
-        const key = el.dataset.key;
+    document.querySelectorAll('#dataTable thead th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
         if (state.sortKey === key) { state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc'; }
         else { state.sortKey = key; state.sortDir = 'asc'; }
-        document.querySelectorAll('#theadLabels .arrow').forEach(a => a.textContent = '');
-        el.querySelector('.arrow').textContent = state.sortDir === 'asc' ? ' ▲' : ' ▼';
+        document.querySelectorAll('#dataTable thead .arrow').forEach(a => a.textContent = '');
+        th.querySelector('.arrow').textContent = state.sortDir === 'asc' ? '▲' : '▼';
         applyFiltersAndRender();
       });
     });
@@ -747,30 +1084,62 @@
     const dateFromEl = document.getElementById('dateFrom');
     const dateToEl = document.getElementById('dateTo');
 
-    dateFromEl.addEventListener('input', () => {
+    const handleDateFromChange = () => {
       if (dateFromEl.value) {
         dateToEl.min = dateFromEl.value;
-        if (dateToEl.value && dateToEl.value < dateFromEl.value) dateToEl.value = dateFromEl.value;
-      } else { dateToEl.removeAttribute('min'); }
+        if (dateToEl.value && dateToEl.value < dateFromEl.value) {
+          dateToEl.value = dateFromEl.value;
+        }
+      } else {
+        dateToEl.removeAttribute('min');
+      }
       applyFiltersAndRender();
-    });
+    };
 
-    dateToEl.addEventListener('input', () => {
+    const handleDateToChange = () => {
       if (dateToEl.value) {
         dateFromEl.max = dateToEl.value;
-        if (dateFromEl.value && dateFromEl.value > dateToEl.value) dateFromEl.value = dateToEl.value;
-      } else { dateFromEl.removeAttribute('max'); }
+        if (dateFromEl.value && dateFromEl.value > dateToEl.value) {
+          dateFromEl.value = dateToEl.value;
+        }
+      } else {
+        dateFromEl.removeAttribute('max');
+      }
       applyFiltersAndRender();
+    };
+
+    dateFromEl.addEventListener('input', handleDateFromChange);
+    dateToEl.addEventListener('input', handleDateToChange);
+
+    [dateFromEl, dateToEl].forEach(el => {
+      const stopScroll = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (document.activeElement === el) {
+          el.blur();
+        }
+      };
+
+      el.addEventListener('wheel', stopScroll, { passive: false, capture: true });
+      el.addEventListener('mousewheel', stopScroll, { passive: false, capture: true });
+
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
+      });
     });
 
     document.getElementById('resetBtn').addEventListener('click', () => {
       document.getElementById('searchBox').value = '';
       document.getElementById('categoryFilter').value = '';
       document.getElementById('typeFilter').value = '';
+
       dateFromEl.value = '';
       dateToEl.value = '';
       dateFromEl.removeAttribute('max');
       dateToEl.removeAttribute('min');
+
       applyFiltersAndRender();
     });
 
@@ -782,6 +1151,7 @@
       else { clearInterval(autoTimer); }
     });
 
+    initSpotlightEffect();
     loadData();
   </script>
 
