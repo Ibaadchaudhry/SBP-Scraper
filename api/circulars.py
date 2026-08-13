@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler
 
 COLUMNS = ["title", "circular_no", "date", "category", "circular_type", "url"]
 
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/salmanadnan2006-hue/SBP-Scraper/main"
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/Ibaadchaudhry/SBP-Scraper/main"
 REMOTE_URL = f"{GITHUB_RAW_BASE}/sbp_circulars.csv"
 LOCAL_PATH = os.path.join(os.path.dirname(__file__), "..", "sbp_circulars.csv")
 
