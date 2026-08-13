@@ -11,7 +11,7 @@ import urllib.request
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/salmanadnan2006-hue/SBP-Scraper/main"
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/Ibaadchaudhry/SBP-Scraper/main"
 REMOTE_URL = f"{GITHUB_RAW_BASE}/sbp_scraper.log"
 LOCAL_PATH = os.path.join(os.path.dirname(__file__), "..", "sbp_scraper.log")
 
