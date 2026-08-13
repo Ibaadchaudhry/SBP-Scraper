@@ -871,16 +871,7 @@
       </div>
       <label class="toggle"><input type="checkbox" id="autoRefresh"> Auto-refresh (30s)</label>
       <button class="ghost" id="resetBtn" type="button">Reset</button>
-      <button class="ghost" id="logBtn" type="button">View log</button>
       <button id="refreshBtn" type="button">Reload</button>
-    </div>
-
-    <div id="logPanel" class="logbook" style="display:none;">
-      <div class="logbook-head">
-        <span>System Run Log</span>
-        <span id="logMeta" class="logbook-meta"></span>
-      </div>
-      <pre id="logBody" class="logbook-body"></pre>
     </div>
 
     <div class="table-wrap spotlight-card">
@@ -1215,29 +1206,6 @@
     document.getElementById('autoRefresh').addEventListener('change', (e) => {
       if (e.target.checked) { autoTimer = setInterval(loadData, 30000); }
       else { clearInterval(autoTimer); }
-    });
-
-    // Logbook view logic
-    const logBtn = document.getElementById('logBtn');
-    const logPanel = document.getElementById('logPanel');
-
-    async function loadLog() {
-      try {
-        const data = await fetchJSON('/api/log?lines=200');
-        const body = document.getElementById('logBody');
-        body.textContent = (data.lines && data.lines.length) ? data.lines.join('\n') : 'No log entries yet — run the scraper at least once.';
-        body.scrollTop = body.scrollHeight;
-        document.getElementById('logMeta').textContent = data.lines ? `last ${data.lines.length} line(s)` : '';
-      } catch (err) {
-        document.getElementById('logBody').textContent = 'Could not load the log.';
-      }
-    }
-
-    logBtn.addEventListener('click', () => {
-      const isOpen = logPanel.style.display !== 'none';
-      logPanel.style.display = isOpen ? 'none' : 'block';
-      logBtn.textContent = isOpen ? 'View log' : 'Hide log';
-      if (!isOpen) { loadLog(); }
     });
 
     // Initialize on page load
