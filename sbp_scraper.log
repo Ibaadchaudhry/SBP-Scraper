@@ -401,3 +401,21 @@ Previous count: 29   New count: 30
 2026-08-20 03:38:10 [INFO] Scraped 30 circular row(s) from the site this run
 2026-08-20 03:38:10 [INFO] No change: counts and URLs match the previous run.
 2026-08-20 03:38:10 [INFO] Base file updated to this run's 30 row(s). Run finished OK.
+2026-08-21 03:41:24 [INFO] ============================================================
+2026-08-21 03:41:24 [INFO] Run started (output=sbp_circulars.csv, category='Microfinance', department='')
+2026-08-21 03:41:24 [INFO] Base file has 30 row(s) from the last run
+2026-08-21 03:42:05 [INFO] Scraped 30 circular row(s) from the site this run
+2026-08-21 03:42:05 [INFO] ============================================================
+CHANGE DETECTED since last run
+============================================================
+Previous count: 30   New count: 30
+
++ 1 added:
+    + All Micro Finance Banks/DFIs/Exchange Companies  (https://www.sbp.org.pk/circulars/DFIs-and-ecid-circular-no-1-of-2011)
+
+- 1 removed:
+    - All Micro Finance Banks/DFIs/Exchange Companies  (https://www.sbp.org.pk/circulars/circular-no-1-of-2011)
+============================================================
+2026-08-21 03:42:05 [INFO] Sending email alert to ibaad.ahmed@mobilinkbank.com ...
+2026-08-21 03:42:06 [INFO]   -> email sent.
+2026-08-21 03:42:06 [INFO] Base file updated to this run's 30 row(s). Run finished OK.

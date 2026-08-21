@@ -1,8 +1,18 @@
 {
-  "checked_at": "2026-08-20T03:38:10.070671+00:00",
+  "checked_at": "2026-08-21T03:42:06.215869+00:00",
   "old_count": 30,
   "new_count": 30,
-  "changed": false,
-  "added": [],
-  "removed": []
+  "changed": true,
+  "added": [
+    {
+      "title": "All Micro Finance Banks/DFIs/Exchange Companies",
+      "url": "https://www.sbp.org.pk/circulars/DFIs-and-ecid-circular-no-1-of-2011"
+    }
+  ],
+  "removed": [
+    {
+      "title": "All Micro Finance Banks/DFIs/Exchange Companies",
+      "url": "https://www.sbp.org.pk/circulars/circular-no-1-of-2011"
+    }
+  ]
 }
