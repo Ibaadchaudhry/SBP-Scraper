@@ -12,12 +12,26 @@ on:
 permissions:
   contents: write   # needed so this workflow can commit the updated files back
 
+# Two scrapes pushing data commits at the same time would race each other,
+# so let one finish before the next starts.
+concurrency:
+  group: daily-scrape
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
+        with:
+          # Without this, "Re-run all jobs" checks out the commit the run
+          # was originally created from, not the current branch -- so a
+          # re-run of yesterday's run silently scrapes with yesterday's
+          # code and then fails to push on top of today's branch.
+          ref: ${{ github.ref_name }}
+          # Full history, so the push step below can rebase if it loses a race.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,5 +68,25 @@ jobs:
           git config user.name "sbp-scraper-bot"
           git config user.email "actions@users.noreply.github.com"
           git add sbp_circulars.csv sbp_circulars_changelog.json sbp_scraper.log
-          git diff --cached --quiet && echo "No changes to commit." || git commit -m "Daily scrape: $(date -u +'%Y-%m-%d %H:%M UTC')"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Daily scrape: $(date -u +'%Y-%m-%d %H:%M UTC')"
+
+          # If someone pushed to the branch while we were scraping, our push
+          # is rejected as a non-fast-forward. Replay our data commit on top
+          # of theirs and try again rather than failing the whole run.
+          for attempt in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push rejected (attempt ${attempt}); rebasing onto the latest ${GITHUB_REF_NAME} and retrying."
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            sleep $(( attempt * 5 ))
+          done
+
+          echo "Still could not push after 3 attempts."
+          exit 1

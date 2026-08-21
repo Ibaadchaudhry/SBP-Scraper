@@ -63,6 +63,13 @@ You can also trigger a run manually any time, without waiting for
 9 AM: go to your repo on GitHub → the **Actions** tab → **Daily SBP
 circulars scrape** → **Run workflow**.
 
+Use **Run workflow** for that, not the **Re-run all jobs** button on an
+older run. A re-run replays the *original* run, which means the workflow
+file comes from whatever the repo looked like back then — so you'd be
+testing old code and wondering why your fix didn't take. (The checkout
+step now pins itself to the current branch, so at least the scraper code
+is up to date, but the workflow file itself still isn't.)
+
 **A few things worth knowing:**
 - GitHub Actions schedules run in UTC. `0 3 * * *` in the workflow
   file is 3:00 AM UTC, which is 8:00 AM PKT. If you ever move time
