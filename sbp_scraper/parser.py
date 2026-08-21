@@ -1,5 +1,5 @@
-"""Parsing of the search-result HTML: the 'Showing page X of Y' indicator
-and the individual circular rows."""
+"""Parsing of the search-result HTML: the 'Showing page X of Y' indicator,
+the pagination links, and the individual circular rows."""
 
 import re
 
@@ -16,6 +16,68 @@ def get_page_indicator(html):
     if m:
         return int(m.group(1)), int(m.group(2))
     return 1, 1
+
+
+BLOCK_MARKERS = (
+    "Attention Required! | Cloudflare",
+    "Sorry, you have been blocked",
+    "cf-error-details",
+)
+
+
+def looks_blocked(html):
+    """True if we got Cloudflare's block page instead of the site.
+
+    Worth distinguishing: a block page parses as zero circulars and no
+    page indicator, which is indistinguishable from "the site changed"
+    unless we look for it explicitly.
+    """
+    head = html[:8000]
+    return any(marker in head for marker in BLOCK_MARKERS)
+
+
+def _absolute(href):
+    return href if href.startswith("http") else BASE + "/" + href.lstrip("/")
+
+
+def _pagination_links(soup):
+    """Yield (label, absolute_href) for every link inside a pagination bar.
+
+    The site renders the same bar twice (above and below the results),
+    so labels repeat; callers should take the first match.
+    """
+    for a in soup.find_all("a", href=True):
+        href = a["href"].strip()
+        if not href or href.startswith("#") or href.lower().startswith("javascript:"):
+            continue
+        in_pagination = any(
+            "pagination" in cls
+            for parent in a.parents
+            for cls in (parent.get("class") or [])
+        )
+        if not in_pagination:
+            continue
+        yield a.get_text(strip=True), _absolute(href)
+
+
+def find_next_page_href(html, current_page=None):
+    """Return the absolute URL of the next results page, or None.
+
+    Prefers the '>' control; falls back to the numbered link for
+    `current_page + 1` in case the site ever drops the arrow. Returns
+    None on the last page, where the site renders no forward link at all.
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    wanted_number = str(current_page + 1) if current_page else None
+    numbered_href = None
+
+    for label, href in _pagination_links(soup):
+        if label == ">":
+            return href
+        if wanted_number and label == wanted_number and numbered_href is None:
+            numbered_href = href
+
+    return numbered_href
 
 
 def parse_listing_page(html):
