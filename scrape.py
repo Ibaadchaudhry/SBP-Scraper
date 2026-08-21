@@ -11,7 +11,7 @@ Logic lives in the sbp_scraper/ package:
     url_builder.py        builds the page-1 search URL
     browser.py            headless Chrome driver setup
     parser.py             HTML parsing (page indicator + circular rows)
-    pagination.py         clicking the ">" next-page link
+    pagination.py         working out the next page's URL
     scraper.py             scrape_all(): pages through the whole site
     storage.py             Excel load / diff / save + changelog JSON
     emailer.py             (optional) Outlook email alert

@@ -12,16 +12,25 @@ the current state of the site.
 
 ## Why Selenium (a real browser) instead of a simple request?
 
-SBP's site loads page 1 normally, but pages 2, 3, 4... are loaded by
-JavaScript when you click the ">" (next page) arrow — not by visiting a
-different web address. A simple HTTP request can't run that JavaScript,
-so it can never actually reach page 2.
+The SBP results list is drawn by JavaScript after the page loads, and the
+site is behind Cloudflare, which turns away plain HTTP clients outright.
+A simple `requests` call gets either an empty shell of a page or a "Sorry,
+you have been blocked" notice. So this scraper drives an actual (headless,
+i.e. invisible) Chrome browser: it opens the page, waits for the results
+to render, and reads them.
 
-This scraper instead drives an actual (headless, i.e. invisible)
-Chrome browser: it opens the page, reads how many total pages there
-are, clicks ">" the same way a person would, waits for the page to
-confirm it advanced, and reads the new content. It repeats until every
-page has been read.
+### How it gets past page 1
+
+Each results page does have its own web address — page 2 is the page-1
+address with `/P30` on the end (30 = rows per page), page 3 is `/P60`, and
+so on. The scraper reads the address off the site's own ">" link and goes
+straight there.
+
+It also **starts a brand-new browser for every page**. That sounds
+wasteful, but Cloudflare blocks every request after the first one in a
+given browser session — no matter which address you ask for, how long you
+wait, or whether cookies are cleared in between. A fresh browser per page
+is what actually works, and a search only has a handful of pages.
 
 ---
 
@@ -237,7 +246,7 @@ python scrape.py --output my_circulars.xlsx
 # Watch the browser work instead of running invisibly (useful for debugging)
 python scrape.py --show-browser
 
-# Slow down a bit between page clicks (default is 1 second)
+# Slow down a bit between pages (default is 1 second)
 python scrape.py --delay 2.0
 
 # Email someone when a change is detected (Windows + Outlook only, see Setup)
@@ -321,7 +330,7 @@ sbp_scraper/
     url_builder.py            ← builds the search-page web address from your filters
     browser.py                ← sets up the invisible Chrome browser
     parser.py                 ← reads a loaded page: extracts circular rows + page number
-    pagination.py             ← clicks the ">" next-page link and waits for it to load
+    pagination.py             ← works out the web address of the next page of results
     scraper.py                ← ties browser + parser + pagination together, page by page
     storage.py                ← loads the old Excel file, compares it to the new results,
                                   prints the change alert, saves the new snapshot + changelog
@@ -346,8 +355,8 @@ GitHub Actions (daily at 9 AM PKT, or triggered manually anytime)
           └─→ job.py            → run_scrape_job(): the actual work for one run
                  │
                  ├─→ scraper.py        → opens the browser (browser.py), reads each page
-                 │                        (parser.py), clicks "next" (pagination.py),
-                 │                        repeats until every page is read
+                 │                        (parser.py), works out the next page's address
+                 │                        (pagination.py), repeats until every page is read
                  ├─→ storage.py        → loads last run's Excel file, compares it to
                  │                        this run's results, saves the changelog + snapshot
                  ├─→ emailer.py        → tries SMTP first (emailer_smtp.py, works
