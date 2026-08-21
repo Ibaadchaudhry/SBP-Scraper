@@ -30,6 +30,16 @@ MAX_ATTEMPTS = 3
 RETRY_BACKOFF = 5.0
 
 
+class IncompleteScrape(RuntimeError):
+    """Raised when we couldn't read every page the site said it had.
+
+    Returning what we did manage to read would be worse than failing:
+    the caller overwrites the saved snapshot with whatever comes back, so
+    a half-read run would drop the missing circulars from the base file
+    and alert on them as "removed", then as "added" again the next day.
+    """
+
+
 def _load(driver, url, settle):
     """Load `url` and hand back whatever HTML we ended up with.
 
@@ -101,6 +111,9 @@ def scrape_all(search_doc="", department="", category="Microfinance",
 
     page = 1
     page_size = 0
+    total_pages = 1
+    pages_read = 0
+    complete = False
     visited = set()
 
     while True:
@@ -109,10 +122,11 @@ def scrape_all(search_doc="", department="", category="Microfinance",
 
         html = fetch_page(url, page, headless=headless)
         if html is None:
-            logger.warning(f"  -> giving up on page {page} after {MAX_ATTEMPTS} "
-                           f"attempt(s); results may be incomplete.")
+            logger.warning(f"  -> giving up on page {page} after "
+                           f"{MAX_ATTEMPTS} attempt(s).")
             break
 
+        pages_read += 1
         page, total_pages = get_page_indicator(html)
         rows = parse_listing_page(html)
         added = collect(rows)
@@ -122,6 +136,7 @@ def scrape_all(search_doc="", department="", category="Microfinance",
         if page_size == 0:
             page_size = len(rows)
         if page >= total_pages:
+            complete = True
             break
         if added == 0:
             logger.warning("  -> page repeated rows we already had; stopping.")
@@ -144,5 +159,14 @@ def scrape_all(search_doc="", department="", category="Microfinance",
         page += 1
         time.sleep(delay)
 
-    logger.info(f"Collected {len(all_rows)} circular(s) across {len(visited)} page(s).")
+    logger.info(f"Collected {len(all_rows)} circular(s) across "
+                f"{pages_read} page(s).")
+
+    if not complete:
+        raise IncompleteScrape(
+            f"read {pages_read} of the {total_pages} page(s) the site "
+            f"reported ({len(all_rows)} circular(s)); not overwriting the "
+            f"saved snapshot with a partial result"
+        )
+
     return all_rows

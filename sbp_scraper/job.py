@@ -12,7 +12,7 @@ import pandas as pd
 from .config import COLUMNS
 from .emailer import send_alert_email
 from .run_log import get_logger
-from .scraper import scrape_all
+from .scraper import IncompleteScrape, scrape_all
 from .storage import diff_snapshots, format_alert, format_alert_html, load_existing, save_changelog, save_snapshot
 
 
@@ -81,6 +81,13 @@ def run_scrape_job(output="sbp_circulars.csv", search_doc="", department="",
             "removed": diff["removed"][["title", "url"]].to_dict("records") if len(diff["removed"]) else [],
             "email_sent": email_sent,
         }
+
+    except IncompleteScrape as e:
+        # Expected enough to not warrant a traceback: the site or its CDN
+        # didn't give us everything, and the previous snapshot stands.
+        logger.error(f"Run FAILED: {e}. The previous snapshot is unchanged; "
+                     f"re-run to try again.")
+        return {"ok": False, "error": str(e)}
 
     except Exception as e:
         logger.exception(f"Run FAILED: {e}")
