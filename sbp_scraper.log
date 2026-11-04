@@ -1254,3 +1254,16 @@ Previous count: 30   New count: 45
 2026-11-03 10:14:59 [INFO] Scraped 45 circular row(s) from the site this run
 2026-11-03 10:14:59 [INFO] No change: counts and URLs match the previous run.
 2026-11-03 10:14:59 [INFO] Base file updated to this run's 45 row(s). Run finished OK.
+2026-11-04 10:06:35 [INFO] ============================================================
+2026-11-04 10:06:35 [INFO] Run started (output=sbp_circulars.csv, category='Microfinance', department='')
+2026-11-04 10:06:35 [INFO] Base file has 45 row(s) from the last run
+2026-11-04 10:06:35 [INFO] Loading page 1: https://www.sbp.org.pk/circulars/search-result/search_doc=&department=&category=Microfinance&circular-type=&circular_start_date=&circular_end_date=
+2026-11-04 10:06:56 [INFO] Page 1 of 2: found 30 circular(s)
+2026-11-04 10:06:57 [INFO] Loading page 2: https://www.sbp.org.pk/circulars/search-result/search_doc=&department=&category=Microfinance&circular-type=&circular_start_date=&circular_end_date=/P30
+2026-11-04 10:07:01 [WARNING]   -> attempt 1: blocked by the site's CDN.
+2026-11-04 10:07:29 [WARNING]   -> attempt 2: asked for page 2 but the page indicator reads 1.
+2026-11-04 10:07:47 [INFO] Page 2 of 2: found 15 circular(s)
+2026-11-04 10:07:47 [INFO] Collected 45 circular(s) across 2 page(s).
+2026-11-04 10:07:47 [INFO] Scraped 45 circular row(s) from the site this run
+2026-11-04 10:07:47 [INFO] No change: counts and URLs match the previous run.
+2026-11-04 10:07:47 [INFO] Base file updated to this run's 45 row(s). Run finished OK.
