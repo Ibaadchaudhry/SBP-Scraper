@@ -1,10 +1,9 @@
 {
-  "checked_at": "2026-11-07T09:23:41.620339+00:00",
-  "old_count": 45,
-  "new_count": 0,
+  "checked_at": "2026-11-08T09:40:50.958285+00:00",
+  "old_count": 0,
+  "new_count": 45,
   "changed": true,
-  "added": [],
-  "removed": [
+  "added": [
     {
       "title": "Revised Prudential Regulations (PRs) for Microfinance Banks",
       "url": "https://www.sbp.org.pk/circulars/acfid-circular-no-01-of-2025"
@@ -185,5 +184,6 @@
       "title": "MICRO FINANCE RULES",
       "url": "https://www.sbp.org.pk/circulars/bsd-circular-no-13-of-2002"
     }
-  ]
+  ],
+  "removed": []
 }
